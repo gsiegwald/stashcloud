@@ -1,4 +1,4 @@
-# Stashcloud – Storage space management on OVHcloud
+# Stashcloud – Self-Hosted File Storage
 
 This project deploys a web-based file management application (upload/download) on OVHcloud, using Filestash as the web interface and OVH Object Storage (S3) for file storage.
 
