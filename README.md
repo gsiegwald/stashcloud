@@ -11,6 +11,21 @@ The infrastructure is automated with Terraform and Ansible.
 - An SSH key configured both on the OVHcloud account (for instance access) and on GitHub (for code deployment).
 
 ## Architecture (overview)
+High-level view of the target architecture and the main network flows between the client, the Filestash VM, and the S3-compatible Object Storage bucket.
+
+```mermaid
+graph LR
+  %% -------- Infrastructure --------
+  subgraph "OVHcloud Public Cloud"
+    VM["VM Ubuntu<br/>Filestash Server"]
+    storage["Object Storage<br/>S3 Bucket"]
+  end
+
+  %% -------- Flux --------
+  UserPC["Client (Browser/SSH)"] -->|SSH 22| VM
+  UserPC -->|HTTP/HTTPS 80/443| VM
+  VM -->|S3 API| storage
+
 The target architecture includes:
 - An Ubuntu Public Cloud instance (VM) to host Filestash and an Nginx server.
 - A Filestash Docker container (web application) accessible through Nginx (which will act as an HTTPS reverse proxy).

@@ -1,13 +1,13 @@
-# Fichiers Terraform à ignorer
+# Terraform files to ignore
 .terraform/
-*.tfstate
-*.tfstate.backup
-# Fichiers de variables sensibles
-*.tfvars
+*.tfstate*
+*.tfstate.backup*
+# Sensible files to ignore
+*.tfvars*
 .env
 vault.yml
-# Clés et certificats
+# Keys and certificates
 *.pem
-id_ed25519
-# Divers
+id_ed25519*
+# Misc.
 __pycache__/
