@@ -31,3 +31,18 @@ The target architecture includes:
 - A Filestash Docker container (web application) accessible through Nginx (which will act as an HTTPS reverse proxy).
 - An OVHcloud Object Storage (S3 bucket) to store uploaded files.
 - A dedicated IAM user with restricted access to this bucket.
+
+## Repository structure
+Current project layout (Sprint 1):
+
+```text
+stashcloud/
+├─ .git/                      # Git repository metadata
+├─ .gitignore                 # Git ignore rules (Terraform cache/state, secrets, etc.)
+├─ README.md                  # Project overview and documentation
+└─ terraform/                 # Terraform configuration (OVH Public Cloud / OpenStack)
+   ├─ main.tf                 # Resources (keypair + VM instance)
+   ├─ provider.tf             # Providers (ovh, openstack) and version constraints
+   └─ .terraform.lock.hcl     # Provider lock file (pinned provider versions)
+
+Note: terraform/terraform.tfstate* and terraform/.terraform/ exist locally but are intentionally ignored by Git for security concerns.
