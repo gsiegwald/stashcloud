@@ -17,7 +17,7 @@ High-level view of the target architecture and the main network flows between th
 graph LR
   %% -------- Infrastructure --------
   subgraph "OVHcloud Public Cloud"
-    VM["VM Ubuntu<br/>Filestash Server"]
+    VM["VM Ubuntu<br/>Filestash Server<br/><i>(attached to Ext-Net)</i>"]
     storage["Object Storage<br/>S3 Bucket"]
   end
 
@@ -48,3 +48,11 @@ stashcloud/
    └─ .terraform.lock.hcl     # Provider lock file (pinned provider versions)
 
 Note: terraform/terraform.tfstate* and terraform/.terraform/ exist locally but are intentionally ignored by Git for security concerns.
+
+## Current project status
+
+Compute layer in place :
+
+* A b2-7 OVHcloud Public Cloud instance running Ubuntu 24.04 LTS has been deployed.
+* The VM is connected to the public network (Ext-Net) and is reachable via SSH.
+* This VM will act as the server host for the Filestash application (deployed later via Docker/Ansible).
