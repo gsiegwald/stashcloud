@@ -48,6 +48,7 @@ stashcloud/
    └─ .terraform.lock.hcl     # Provider lock file (pinned provider versions)
 
 Note: terraform/terraform.tfstate* and terraform/.terraform/ exist locally but are intentionally ignored by Git for security concerns.
+```
 
 ## Current project status
 
