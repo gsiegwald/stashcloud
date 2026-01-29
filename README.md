@@ -20,11 +20,12 @@ graph LR
     VM["VM Ubuntu<br/>Filestash Server"]
     storage["Object Storage<br/>S3 Bucket"]
   end
+
   %% -------- Flux --------
   UserPC["Client (Browser/SSH)"] -->|SSH 22| VM
   UserPC -->|HTTP/HTTPS 80/443| VM
   VM -->|S3 API| storage
-
+```
 
 
 The target architecture includes:
