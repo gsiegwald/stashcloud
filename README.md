@@ -46,7 +46,9 @@ stashcloud/
 └─ terraform/                  # Terraform configuration
    ├─ main.tf                  # Provider block, network, security group, EC2 resources
    ├─ variables.tf             # Input variables (aws_region, admin_ip)
-   └─ terraform.tfvars         # Local-only values (admin_ip) – NOT committed
+   ├─ terraform.tfvars         # Local-only values (admin_ip) – NOT committed
+   └─ .terraform.lock.hcl      # Provider version locks
+
  
 Note: terraform/terraform.tfstate* and terraform/.terraform/ exist locally but are intentionally ignored by Git for security concerns.
 ```
