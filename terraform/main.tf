@@ -87,7 +87,7 @@ resource "aws_security_group" "web_sg" {
 }
 
 ####################################
-# Accès SSH : clé publique
+# SSH access 
 ####################################
 resource "aws_key_pair" "admin_key" {
   key_name   = "stashcloud-admin-key"
@@ -95,7 +95,7 @@ resource "aws_key_pair" "admin_key" {
 }
 
 ####################################
-# Instance EC2 de base
+# EC2 Instance
 ####################################
 
 data "aws_ssm_parameter" "ubuntu_2404_ami" {
