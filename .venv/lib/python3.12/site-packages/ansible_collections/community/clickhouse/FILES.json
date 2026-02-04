@@ -1,0 +1,845 @@
+{
+ "files": [
+  {
+   "name": ".",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": ".github",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": ".github/workflows",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": ".github/workflows/ansible-test-plugins.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "3db49c35962ccf2c7792c7b2bd8316aa39b1ca190e20ff2d996c0d231fc0a802",
+   "format": 1
+  },
+  {
+   "name": ".github/CODEOWNERS",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "6aeb37bc89a4a7fb941eb0dd8df3c1bb0703b048a9db558fd3fe7f9bff40db15",
+   "format": 1
+  },
+  {
+   "name": ".github/dependabot.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "97bbf02f049442305adfda1ebf0f8193df60cad9a639b614bcc69aca8ab56e79",
+   "format": 1
+  },
+  {
+   "name": ".vscode",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": ".vscode/extensions.json",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "f72b83e1aa1301adb18ce0fe71ce6613d3cfb148f881b3e39c55359d41d3277f",
+   "format": 1
+  },
+  {
+   "name": "changelogs",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "changelogs/fragments",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "changelogs/fragments/.keep",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "changelogs/changelog.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "39886fa1ce81783cac97b29b9a888ad1304a65ab1e39a863a922da07248948de",
+   "format": 1
+  },
+  {
+   "name": "changelogs/config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "208963ebd80e4c6e268891dbea6ec916e004e518ee4ea08c3294ba3e451d7bde",
+   "format": 1
+  },
+  {
+   "name": "docs",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "docs/docsite",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "docs/docsite/links.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "06400ae11f98e4c1dbf222eb6464acff9c2ac3c5f39c49d929a860b9181aae54",
+   "format": 1
+  },
+  {
+   "name": "meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "meta/ee-bindep.txt",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "d1e1f21531f7d926adc69d7301e89b33ffaa072d269370af861f5b1f3b9454b9",
+   "format": 1
+  },
+  {
+   "name": "meta/ee-requirements.txt",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cda0cfbb9508d54db72a2e085c17a7f12bf2a7b31865b84d1d0fee02f10ab2f4",
+   "format": 1
+  },
+  {
+   "name": "meta/execution-environment.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "289aa887fe4494885d95b446c18ebff41be93e84e70c6f2b22929cc30200a09a",
+   "format": 1
+  },
+  {
+   "name": "meta/runtime.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "340e2bbe25684195f926926468edc5299995741ee61bb3b07362f0256bf20526",
+   "format": 1
+  },
+  {
+   "name": "plugins",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/doc_fragments",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/doc_fragments/client_inst_opts.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ef681efc5ba67cdf819d5b2281a084556c4502071d5523c0bdddf17d9be23ab8",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/clickhouse.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "99e14dd2688e55aef082874f55ff5a52401b54b1758ea356d8e7a3e1a2cb0023",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/clickhouse_cfg_info.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "2fbb595b714b6a6ff908c74244c522cab3297dff322c05806fbc335f38913609",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/clickhouse_client.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "1de5ccadfb54f8534d759002d1a998e049e07da9ff651de50ea897d71d170a38",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/clickhouse_db.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "85495d94d0ec124a37856239e392da9aea725cc783b38a3035493f9636cdfe11",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/clickhouse_grants.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "1e88be18a9a0a700deefa82c5c44b3ecc38b88a17fdc9a9f51a5cf50a6fb8076",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/clickhouse_info.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "506cfc1773fba0b5a8212fe99ddcbd6eebcd0d836fb48a1c096418701508d64d",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/clickhouse_quota.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "0086dfdb1041e0a8fddb6b2d4745699a7ac660e8edc7dfb24198ae7511f91cb5",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/clickhouse_role.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "fd41f8227e24c07774020ed2275d381375957b89e8d9eb79c7fe2db96bd5302b",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/clickhouse_user.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "b1a61566d06224edadd17fd96e4bcf59875cf60c39c3d906669779c617c3e66e",
+   "format": 1
+  },
+  {
+   "name": "tests",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_cfg_info",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_cfg_info/files",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_cfg_info/files/config.xml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "8bab9d0734624a7d9bbefe1f64f98e87248115184e11aa12534735cebdadbf16",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_cfg_info/files/config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "4b81a49331d687fed555947e49bfaaf5cbc82b2b4b99b535d72d104bcd11e6de",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_cfg_info/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_cfg_info/tasks/initial.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "458ff5e703473a7d1ae29b1c78cff32b2e5298202da494cd504e8a0f0ce83756",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_cfg_info/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "1acaef0d5d55013e30b0ab15382874e790b856ad2ef5b404e57d045ef8bc9f85",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_client",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_client/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_client/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "74d364b61992014c0e089405e33d5121eca144a48e814e6ad21531e993f94890",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_client/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_client/tasks/data_types.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "3c3128bf9964d6e326cc31c1617a1d7c26df600ca651b0c64139cddc018de645",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_client/tasks/initial.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "90cefdcdb651b4283b6fb2ce7b432e45d79aab11af823678f6a014e96608cce0",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_client/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cdad0ba55b61e3d7c21bc355cfbbfc64f2948608369f06687c24cd48301d4b4d",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_db",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_db/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_db/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "74d364b61992014c0e089405e33d5121eca144a48e814e6ad21531e993f94890",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_db/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_db/tasks/initial.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "96fdf48f4e862d739da171f05e10cd969fb6d294d7d5a9d2c18e9debba285b97",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_db/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "85c234099acec8b9cbe657f8eef1350ab9a1fbc3b0d116e3290b2f5bc45c49ba",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_grants",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_grants/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_grants/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "74d364b61992014c0e089405e33d5121eca144a48e814e6ad21531e993f94890",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_grants/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_grants/tasks/cluster.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "6e5a2bcab01fd0e0eb0625ed80bbe2aa249ec246bceaab4115bd4a4ae69ba12f",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_grants/tasks/initial.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "573e4c96fbc4dbc53bca414975df7b1f4d103b555671fa46e66f47127b26f560",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_grants/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e20f3c43ce98ee6778c4022a79946c2c86834f438ab887e380b8b7979ba820ad",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_info",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_info/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_info/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "74d364b61992014c0e089405e33d5121eca144a48e814e6ad21531e993f94890",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_info/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_info/tasks/initial.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "d918016e2c809a493392b582456501b996c5298da5454729b2e2c3b15ad86627",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_info/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "4566420a56c9f994be9c285b70c3ab3e1ecbe4c8f8e5741ff818c26b9a3cbf3c",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_quota",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_quota/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_quota/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "74d364b61992014c0e089405e33d5121eca144a48e814e6ad21531e993f94890",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_quota/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_quota/tasks/initial.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "57f6dc1049e738cf07261eab2655fb6647ebe5b02437eda93f8c765f89dd48d4",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_quota/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "246dd0f7cda6b6b477c86091aae2f38ac7c501f750e07599b1e26e028d02f76c",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_role",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_role/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_role/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "74d364b61992014c0e089405e33d5121eca144a48e814e6ad21531e993f94890",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_role/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_role/tasks/advanced.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "821d8df1b6ed78d766ace16ec3bfcee33a5c77c3b3b73d27f56a097370b6e712",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_role/tasks/initial.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ff79e09b8cc79f9f7e50a1340d6fdcdd0ea0fbdacbd555554fe2da6c2450f32f",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_role/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "94c01facfee86d4bbef1e9f2d3e668c57f9afa2a81cd1c0e50ec80c838aeaff6",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_user",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_user/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_user/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "74d364b61992014c0e089405e33d5121eca144a48e814e6ad21531e993f94890",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_user/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_user/tasks/initial.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "f9a48cc7aca1c36675332c8fb2b8d6e45b7980c76ded8e41d3bebeac9e8e3efd",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/clickhouse_user/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "85c234099acec8b9cbe657f8eef1350ab9a1fbc3b0d116e3290b2f5bc45c49ba",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/setup_clickhouse",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/setup_clickhouse/files",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/setup_clickhouse/files/cluster.xml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "1e7dcf4ed88dbda5c923b7d960e3ae34906997f66a7265059bc76a79385a25cc",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/setup_clickhouse/files/default_user.xml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9583e868dd95671f3644fecb7895b75e2a95ed628305fb713bb4d23898ca430d",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/setup_clickhouse/files/test_dictionary.xml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "25d1b9de43e578648a907425707a472adca652612cab66f1b77245e756fef946",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/setup_clickhouse/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/setup_clickhouse/tasks/install.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e7b017a5772c82ce8520f4e76083555b720a1a535d1e02e94d394f626fdbd688",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/setup_clickhouse/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "15ffebe3709ac758b7b94c5f8ecdd500f1deeb1e62270cb1e4e26982f625d47e",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/setup_clickhouse/vars",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/setup_clickhouse/vars/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ff02ff69231579d73607513f7a424d2d211138d1a594c235757a8c449c8aceec",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/inventory",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "1057af8bec011239901c9ef5cd4654ddc9bb827b454004c2dad3943fc0b1d2aa",
+   "format": 1
+  },
+  {
+   "name": "tests/unit",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/unit/plugins",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/unit/plugins/module_utils",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/unit/plugins/module_utils/test_clickhouse.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9132c719762162c4adf67b57a7c4e37e04e8e133c8fd3416e33ec70d034d3c78",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/plugins/modules",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/unit/plugins/modules/test_clickhouse_client.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "a886061d178feb01a52b0415f8f89b6baf5207fa36ff6dbabc035c684b64ffff",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/plugins/modules/test_clickhouse_grants.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "1f2010c685f5b0ddb0948edd6c76c25a6ec73fdfbf658f055b860edb728ae3d6",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/plugins/modules/test_clickhouse_quota.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7e0f24ac08864855cd0947fc4db6fd7095be119d11115d388c999bf0f5d43e4e",
+   "format": 1
+  },
+  {
+   "name": ".ansible-lint",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "fdd322aaa022fa61b89d4a3f1868bc53cf1f89585b46ab9f31974280a8f15689",
+   "format": 1
+  },
+  {
+   "name": "CHANGELOG.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "481b91613f944de718ca0cfd3be64e4561f979f96cd96ca130117dd5fecd317c",
+   "format": 1
+  },
+  {
+   "name": "CODE_OF_CONDUCT.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "00d956a13fa51a76046130ba6b80be4c3109196e2435aed718f2353f7160998c",
+   "format": 1
+  },
+  {
+   "name": "CONTRIBUTING.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "d54323e65feaa74bc06d757b61a8a795bb63eec4839b8c9b1a66bc95cc48ec73",
+   "format": 1
+  },
+  {
+   "name": "LICENSE",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+   "format": 1
+  },
+  {
+   "name": "MAINTAINERS",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "8942636c4edaa2aa7216157292f3de353b561b567f7d9f6d7cbde9b4bf84589b",
+   "format": 1
+  },
+  {
+   "name": "MAINTAINING.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "fd662ccdf3171815cf4d41a22b4037fde3c331587e6df37ded55864b2155de5b",
+   "format": 1
+  },
+  {
+   "name": "README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "f0c5714ea8999d63f1fa71073f4eddf5282ee2f78c6165c963a3b40583ba814b",
+   "format": 1
+  },
+  {
+   "name": "REVIEW_CHECKLIST.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "91ad4aff2cc14b98f81fbe2d90609c5a69ed96b6d836387a9c697c1112e603c0",
+   "format": 1
+  },
+  {
+   "name": "codecov.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "be5a3ce49e83557a22ee8a429616f7caf67d9f7bd926b9d6270ed1c21b3d35e5",
+   "format": 1
+  },
+  {
+   "name": "requirements.txt",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9c4999e7f1c2abd8dface97978869b9d9c1f3bbf7f3847ceb6bb35ebb0043cea",
+   "format": 1
+  }
+ ],
+ "format": 1
+}

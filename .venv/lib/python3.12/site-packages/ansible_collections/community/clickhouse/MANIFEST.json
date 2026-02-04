@@ -1,0 +1,31 @@
+{
+ "collection_info": {
+  "namespace": "community",
+  "name": "clickhouse",
+  "version": "2.0.0",
+  "authors": [
+   "Ansible ClickHouse community"
+  ],
+  "readme": "README.md",
+  "tags": [
+   "database",
+   "clickhouse"
+  ],
+  "description": "ClickHouse collection for Ansible",
+  "license": [],
+  "license_file": "LICENSE",
+  "dependencies": {},
+  "repository": "https://github.com/ansible-collections/community.clickhouse",
+  "documentation": null,
+  "homepage": "https://github.com/ansible-collections/community.clickhouse",
+  "issues": "https://github.com/ansible-collections/community.clickhouse/issues"
+ },
+ "file_manifest_file": {
+  "name": "FILES.json",
+  "ftype": "file",
+  "chksum_type": "sha256",
+  "chksum_sha256": "d78fefc4daae4d046c03c71248a1ad06411df623f1318e4d8ac5cd84a3cd5f94",
+  "format": 1
+ },
+ "format": 1
+}

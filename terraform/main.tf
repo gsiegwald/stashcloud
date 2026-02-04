@@ -13,7 +13,7 @@ resource "aws_vpc" "main_vpc" {
   cidr_block           = "10.0.0.0/16"
   enable_dns_support   = true
   enable_dns_hostnames = true
-  tags = { Name = "stashcloud-vpc" }
+  tags                 = { Name = "stashcloud-vpc" }
 }
 
 resource "aws_internet_gateway" "gw" {
@@ -22,11 +22,10 @@ resource "aws_internet_gateway" "gw" {
 }
 
 resource "aws_subnet" "public_subnet" {
-  vpc_id                  = aws_vpc.main_vpc.id
-  cidr_block              = "10.0.1.0/24"
-  availability_zone       = "${var.aws_region}a"
-  map_public_ip_on_launch = true
-  tags = { Name = "stashcloud-public-subnet" }
+  vpc_id            = aws_vpc.main_vpc.id
+  cidr_block        = "10.0.1.0/24"
+  availability_zone = "${var.aws_region}a"
+  tags              = { Name = "stashcloud-public-subnet" }
 }
 
 resource "aws_route_table" "public_rt" {
@@ -91,8 +90,9 @@ resource "aws_security_group" "web_sg" {
 ####################################
 resource "aws_key_pair" "admin_key" {
   key_name   = "stashcloud-admin-key"
-  public_key = file("~/.ssh/id_ed25519.pub") 
+  public_key = file("~/.ssh/id_ed25519.pub")
 }
+
 
 ####################################
 # EC2 Instance
@@ -102,27 +102,48 @@ data "aws_ssm_parameter" "ubuntu_2404_ami" {
   name = "/aws/service/canonical/ubuntu/server/noble/stable/current/amd64/hvm/ebs-gp3/ami-id"
 }
 
-resource "aws_instance" "stashcloud_vm" {
-  ami                         = data.aws_ssm_parameter.ubuntu_2404_ami.value
-  instance_type               = "t3.micro"
-  subnet_id                   = aws_subnet.public_subnet.id
-  vpc_security_group_ids      = [aws_security_group.web_sg.id]
-  key_name                    = aws_key_pair.admin_key.key_name
+resource "aws_instance" "stashcloud_ec2" {
+  ami                    = data.aws_ssm_parameter.ubuntu_2404_ami.value
+  instance_type          = "t3.micro"
+  subnet_id              = aws_subnet.public_subnet.id
+  vpc_security_group_ids = [aws_security_group.web_sg.id]
+  key_name               = aws_key_pair.admin_key.key_name
 
-  # Sécurisation IMDSv2
+  # IMDSv2 securisation
   metadata_options {
     http_endpoint               = "enabled"
     http_tokens                 = "required"
     http_put_response_hop_limit = 2
   }
 
-  tags = { Name = "stashcloud-ec2" }
+  tags = { Name = "stashcloud_ec2" }
+}
+
+
+####################################
+# Elastic IP
+####################################
+
+resource "aws_eip" "stashcloud_eip" {
+  tags = {
+    Name = "stashcloud_eip"
+  }
+}
+
+####################################
+# EIP and Instance association
+####################################
+
+resource "aws_eip_association" "stashcloud_eip_association" {
+  allocation_id = aws_eip.stashcloud_eip.id
+  instance_id   = aws_instance.stashcloud_ec2.id
 }
 
 ####################################
 # Outputs
 ####################################
+
 output "ec2_public_ip" {
   description = "EC2 public IP adress"
-  value       = aws_instance.stashcloud_vm.public_ip
+  value       = aws_eip.stashcloud_eip.public_ip
 }

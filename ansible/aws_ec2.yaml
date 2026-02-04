@@ -1,0 +1,16 @@
+plugin: amazon.aws.aws_ec2
+regions:
+  - eu-west-3
+
+filters:
+  tag:Name: stashcloud_ec2
+
+hostnames:
+  - tag:Name
+
+compose:
+  ansible_host: public_ip_address
+
+keyed_groups:
+  - key: tags.Name
+    prefix: tag

@@ -1,0 +1,313 @@
+{
+ "files": [
+  {
+   "name": ".",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "LICENSE",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "023dd19d68b9d440dc68843f415d430f837c7103cd4a7ff64340d008f5a03b69",
+   "format": 1
+  },
+  {
+   "name": "meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "meta/runtime.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "936412dac1f29e54eb732ab6e647a6066b032bd91e69dd36e2ea67acf5d9a96b",
+   "format": 1
+  },
+  {
+   "name": ".gitignore",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "fe351e36bb8f95356cb6d794b8644057a31cd8aaf6dd2eb61fa1bbcc6690be5c",
+   "format": 1
+  },
+  {
+   "name": "README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "64d9a73c206490de3c6a508a1fd40250ae3d6593b12f030c089e06beb9e4fdf1",
+   "format": 1
+  },
+  {
+   "name": "docs",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "docs/alpaca_agent.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "eb0339cd8703c119f617a51d71d776111dcbb097a1329a1312ea1475561837a7",
+   "format": 1
+  },
+  {
+   "name": "docs/alpaca_group.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "0de84bd10da7f6f1ccd6ebcf817b30de728d28c8b1c58e7f24ab3d88ad27a75f",
+   "format": 1
+  },
+  {
+   "name": "docs/alpaca_command_set.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "8a1d70f932d58be1cac589e4b42599a62c7b9e615d6264841e2137844bbc21d4",
+   "format": 1
+  },
+  {
+   "name": "docs/alpaca_system.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "68133e67c467b1c8b3459c861acea6496b1e410c3b692b8906bb8695744bfd3b",
+   "format": 1
+  },
+  {
+   "name": "docs/alpaca_command.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "55b576b56a7abbc1ad62cbf0ff72bef897e781bcd273f8fd51120544ebe18bed",
+   "format": 1
+  },
+  {
+   "name": "docs/index.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7ab94e69fc9011ed7371d598f69df30056c42a6b5836378f2ea09dbfdc27bf4a",
+   "format": 1
+  },
+  {
+   "name": "plugins",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/doc_fragments",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/doc_fragments/api_connection.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "a1a261f877639cd9695b157e67928e3ed2bc0c2e7491011e308d41e6c5834b95",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/_alpaca_api.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "dbd87d9932731041b681da33c1f74564825f79fc1944f4f74c194142b33b5008",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/alpaca_system.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "c5e9c6fa8f651cffa7858ac044c8ae820a5227dfb50a68f4924d277ce1a2dcf9",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/alpaca_group.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "4b2465cd5d44d17099ef039005399bc680802742d19fc1267d15369e65919c26",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/alpaca_command.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "d870a1ef7fdf5464435dd3ad8dfb3524d6eeb4f8aad348a176238b2d5aa0c8f4",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/alpaca_command_set.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ea4cea00821031342eb706926f7933db0e3fe5c371a4fdd765662dcee93e1c0f",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/alpaca_agent.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "d9ca534da71108143801868db9c5ac676df88fba08b60a39bb4e9d46eb7b777a",
+   "format": 1
+  },
+  {
+   "name": "changelogs",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "changelogs/changelog.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "f738aa43f9137b8c9891f29c18eeade940ea4dc618b9dddbe34449b1dcf62c83",
+   "format": 1
+  },
+  {
+   "name": "changelogs/fragments",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "changelogs/fragments/release-2.1.1.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "a33268ab9ff975ae01f618180a26768962601aa5e3ccaaf9f5fd8c6f8ffbafa8",
+   "format": 1
+  },
+  {
+   "name": "changelogs/fragments/release-2.0.0-acsc-review-fixes.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "87a889312215f6f618fa916fe8bcefe916734d62687d6d26f32fe3daf4c57b1d",
+   "format": 1
+  },
+  {
+   "name": "changelogs/fragments/release-2.1.0.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "d4dc48ca8660b48a0627df856fb4091ea7e0f795993c505e77b1b3051bf8436c",
+   "format": 1
+  },
+  {
+   "name": "changelogs/config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "b61505f9ff44220b5ef086e6ec3575905807b971956c41fa56c2e0a54f1af209",
+   "format": 1
+  },
+  {
+   "name": "tests",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/sanity",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/sanity/ignore-2.17.txt",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "89e7b588747fccf710facb34e90cc4bb8eebceafbd067fd63e14fa9f8244711c",
+   "format": 1
+  },
+  {
+   "name": "tests/sanity/ignore-2.18.txt",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "89e7b588747fccf710facb34e90cc4bb8eebceafbd067fd63e14fa9f8244711c",
+   "format": 1
+  },
+  {
+   "name": "tests/sanity/ignore-2.15.txt",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "89e7b588747fccf710facb34e90cc4bb8eebceafbd067fd63e14fa9f8244711c",
+   "format": 1
+  },
+  {
+   "name": "tests/sanity/ignore-2.16.txt",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "89e7b588747fccf710facb34e90cc4bb8eebceafbd067fd63e14fa9f8244711c",
+   "format": 1
+  },
+  {
+   "name": "tests/sanity/README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "daf3a748d85d3225ba2adb7b8047be8295cbf5a833801e6b5c76fc48e42cda0d",
+   "format": 1
+  },
+  {
+   "name": "tests/sanity/ignore-2.14.txt",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "89e7b588747fccf710facb34e90cc4bb8eebceafbd067fd63e14fa9f8244711c",
+   "format": 1
+  },
+  {
+   "name": "tests/sanity/ignore-2.19.txt",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "89e7b588747fccf710facb34e90cc4bb8eebceafbd067fd63e14fa9f8244711c",
+   "format": 1
+  },
+  {
+   "name": "tests/sanity/ignore-2.13.txt",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "89e7b588747fccf710facb34e90cc4bb8eebceafbd067fd63e14fa9f8244711c",
+   "format": 1
+  },
+  {
+   "name": "tests/sanity/ignore-2.12.txt",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "89e7b588747fccf710facb34e90cc4bb8eebceafbd067fd63e14fa9f8244711c",
+   "format": 1
+  },
+  {
+   "name": "tests/sanity/ignore-2.20.txt",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "89e7b588747fccf710facb34e90cc4bb8eebceafbd067fd63e14fa9f8244711c",
+   "format": 1
+  },
+  {
+   "name": "CHANGELOG.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "6d29cadfa839213cf6a5462aef6d0512908622f67139f349683c2956d41bf292",
+   "format": 1
+  }
+ ],
+ "format": 1
+}
