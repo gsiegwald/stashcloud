@@ -1,0 +1,5 @@
+---
+- hosts: tag_stashcloud_ec2        # nom du groupe généré par votre inventaire dynamique
+  become: true                     # exécuter avec sudo
+  roles:
+    - base                         # appelle le rôle situé dans ansible/roles/base
