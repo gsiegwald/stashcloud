@@ -1,0 +1,5 @@
+---
+- hosts: backend
+  become: true
+  roles:
+    - base          # ajouter vos rôles backend spécifiques ici
