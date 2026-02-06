@@ -11,3 +11,5 @@ vault.yml
 id_ed25519*
 # Misc.
 __pycache__/
+#Python environment
+.venv/
