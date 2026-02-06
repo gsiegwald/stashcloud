@@ -69,10 +69,11 @@ ssh -i ~/.ssh/id_ed25519 ubuntu@$(terraform output -raw ec2_public_ip)
 * No password authentication: the Ubuntu image uses key-based SSH only by default.
 * IMDSv2 enforced: metadata access requires a session token.
 
-
 ## Current project status
 
 * A t3.micro instance on Amazon Web Services (region eu-west-3, Paris) is up and running with Ubuntu 24.04 LTS.
 * The VM resides in a dedicated VPC public subnet and is reachable via its public IPv4; SSH access is restricted to your `admin_ip` by the security-group rule.
 * This instance will host the Filestash application later, to be deployed with Docker/Ansible.
 
+
+test
