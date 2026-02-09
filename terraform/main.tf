@@ -116,7 +116,12 @@ resource "aws_instance" "stashcloud_ec2" {
     http_put_response_hop_limit = 2
   }
 
-  tags = { Name = "stashcloud_ec2" }
+  tags = {
+    Name    = "stashcloud_ec2"
+    Stack   = "frontend"
+    Project = "stashcloud"
+  }
+
 }
 
 
