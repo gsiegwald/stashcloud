@@ -34,7 +34,6 @@ The target architecture includes:
 
 
 ## Repository structure
-Current project layout (Sprint 1):
 
 ```text
 stashcloud/
