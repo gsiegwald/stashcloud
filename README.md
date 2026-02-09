@@ -38,15 +38,32 @@ Current project layout (Sprint 1):
 
 ```text
 stashcloud/
-├─ .git/                       # Git repository metadata
-├─ .gitignore                  # Ignore Terraform state/cache and any *.tfvars secrets
-├─ README.md                   # Project overview and updated AWS instructions
-└─ terraform/                  # Terraform configuration
-   ├─ main.tf                  # Provider block, network, security group, EC2 resources
-   ├─ variables.tf             # Input variables (aws_region, admin_ip)
-   ├─ terraform.tfvars         # Local-only values (admin_ip) – NOT committed
-   └─ .terraform.lock.hcl      # Provider version locks
-
+├─ .git/                         
+├─ .gitignore                    # Ignore Terraform state/cache and any *.tfvars secrets
+├─ README.md                     
+├─ ansible/                      
+│  ├─ ansible.cfg                # Ansible settings
+│  ├─ inventories/
+│  │  └─ aws_ec2.yaml            # Dynamic inventory (AWS EC2 plugin) + host compose
+│  ├─ group_vars/                # Group variables split by host groups
+│  │  ├─ backend/
+│  │  │  └─ main.yml             # Variables for backend hosts
+│  │  └─ frontend/
+│  │     └─ main.yml             # Variables for frontend hosts
+│  ├─ playbooks/
+│  │  ├─ provision_back.yml      # Backend provisioning playbook
+│  │  ├─ provision_front.yml     # Frontend provisioning playbook
+│  │  └─ site.yml                # Main entrypoint playbook (orchestrates roles/plays)
+│  └─ roles/
+│     └─ base/
+│        ├─ handlers/
+│        │  └─ main.yml          
+│        └─ tasks/
+│           └─ main.yml          # Base tasks (updates, Docker install, etc.)
+└─ terraform/                    
+   ├─ main.tf                    # Provider block, network, security group, EC2 resources
+   ├─ variable.tf                # Input variables (aws_region, admin_ip, etc.)
+   └─ .terraform.lock.hcl        
  
 Note: terraform/terraform.tfstate* and terraform/.terraform/ exist locally but are intentionally ignored by Git for security concerns.
 ```
