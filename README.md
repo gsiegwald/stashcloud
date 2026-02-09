@@ -67,6 +67,50 @@ stashcloud/
 Note: terraform/terraform.tfstate* and terraform/.terraform/ exist locally but are intentionally ignored by Git for security concerns.
 ```
 
+## Provisionning
+
+
+```mermaid
+---
+config:
+  layout: fixed
+---
+flowchart LR
+ subgraph L["Local / Operator"]
+        U["Admin workstation"]
+        TF["Terraform local"]
+        ANS["Ansible local"]
+  end
+ subgraph CP["AWS APIs"]
+        VPCAPI["VPC API"]
+        EC2API["EC2 API"]
+  end
+ subgraph DP["AWS Resources"]
+        VPC["VPC / Subnets / Internet Gateway / Route Tables"]
+        SG["Security Group"]
+        EC2["EC2 instance stashcloud_ec2\nUbuntu"]
+  end
+ subgraph APP["Target Host / Service"]
+        OS["OS provisioning\napt update and upgrade"]
+        DOCKER["Docker Engine"]
+        CT["Application container"]
+        EP["Service endpoints <br>HTTP and HTTPS"]
+  end
+    U --> TF & ANS
+    TF -- AWS API over HTTPS --> VPCAPI & EC2API
+    VPCAPI --> VPC
+    EC2API --> SG & EC2
+    SG --- EC2
+    ANS -- Query inventory by tags --> EC2API
+    EC2API -- Return public IP --> ANS
+    ANS -- SSH with key --> EC2
+    EC2 --> OS
+    OS --> DOCKER
+    DOCKER --> CT
+    CT --> EP
+    B["User / Browser"] -- HTTP or HTTPS --> EP
+```
+
 ## Security
 
 ### SSH access
