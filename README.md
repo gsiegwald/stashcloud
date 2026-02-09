@@ -6,8 +6,6 @@ The infrastructure is automated with Terraform and Ansible.
 
 ## Prerequisites
 - A local Linux machine with Terraform, Ansible, Docker, Docker Compose, s3cmd, and Git installed (tested versions: Terraform 1.14.3, Ansible 2.10.8, Docker 29.2.0, Docker Compose 5.0.2, aws-cli 2.33.12).
-- An OVHcloud account with an active Public Cloud project, and OVH API keys configured.
-- A domain name (for HTTPS access, to be configured later).
 - An Amazon Web Services account with programmatic access enabled (Access Key ID and Secret Access Key) or an IAM role usable by Terraform.
 - An SSH public key registered in the account for EC2 key-pair creation, with the matching private key stored on your local workstation for SSH access.
 
