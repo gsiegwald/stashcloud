@@ -1,18 +1,57 @@
 ---
-- name: apt update
+- name: Update APT package index
   apt:
     update_cache: yes
   become: yes
 
-- name: install docker
+- name: Upgrade system packages
   apt:
-    name: docker.io
+    upgrade: dist
+    autoremove: yes
+  become: yes
+
+- name: Install Docker prerequisites
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - ca-certificates
+    - curl
+    - gnupg
+    - lsb-release        # correct
+  become: yes
+
+- name: Add Docker official GPG key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
     state: present
   become: yes
 
-- name: add ubuntu user to docker group
+- name: Add Docker APT repository
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+    state: present
+  become: yes
+
+- name: Refresh APT index (after adding Docker repo)
+  apt:
+    update_cache: yes
+  become: yes
+
+- name: Install Docker CE, CLI, containerd and Compose v2
+  apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-compose-plugin
+    state: present
+  become: yes
+
+- name: Add ubuntu user to docker group
   user:
     name: ubuntu
     groups: docker
     append: yes
   become: yes
+

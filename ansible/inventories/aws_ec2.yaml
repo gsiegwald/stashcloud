@@ -2,15 +2,19 @@ plugin: amazon.aws.aws_ec2
 regions:
   - eu-west-3
 
+hostvars_prefix: ec2_
+
 filters:
-  tag:Name: stashcloud_ec2
+  instance-state-name: running
+  tag:Project: stashcloud
 
 hostnames:
   - tag:Name
 
 compose:
-  ansible_host: public_ip_address
+  ansible_host: ec2_public_ip_address
 
-keyed_groups:
-  - key: tags.Name
-    prefix: tag
+groups:
+  frontend: ec2_tags.Stack == 'frontend'
+  backend:  ec2_tags.Stack == 'backend'
+
