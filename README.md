@@ -122,6 +122,7 @@ terraform apply
 #Instances installs and configuration
 cd ~/stashcloud/ansible
 ansible-playbook -i inventories/aws_ec2.yaml playbooks/provision_front.yml
+```
 
 ## Security
 
