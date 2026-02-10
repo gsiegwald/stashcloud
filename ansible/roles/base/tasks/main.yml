@@ -55,3 +55,24 @@
     append: yes
   become: yes
 
+- name: Make sure /srv/filestash directory is present
+  file:
+    path: /srv/filestash
+    state: directory
+    owner: ubuntu     
+    group: ubuntu
+    mode: "0755"
+
+- name: Copy Filestash-only Docker Compose file
+  copy:
+    src: ../../docker/docker-compose.yml 
+    dest: /srv/filestash/docker-compose.yml
+    owner: ubuntu
+    group: ubuntu
+    mode: "0644"
+
+- name: Launch / update Filestash stack
+  community.docker.docker_compose_v2:
+    project_src: /srv/filestash 
+    pull: always                  
+    state: present            
