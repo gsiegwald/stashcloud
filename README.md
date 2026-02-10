@@ -5,11 +5,11 @@ This project deploys a web-based file management application on AWS, using Files
 The infrastructure is automated with Terraform and Ansible.
 
 ## Prerequisites
-- A local Linux machine with Terraform, Ansible, Docker, Docker Compose, s3cmd, and Git installed (tested versions: Terraform 1.14.3, Ansible 2.10.8, Docker 29.2.0, Docker Compose 5.0.2, aws-cli 2.33.12).
+- A local Linux machine with Terraform, Ansible, Docker, Docker Compose, AWS CLI, and Git installed (tested versions: Terraform 1.14.3, Ansible 2.10.8, Docker 29.2.0, Docker Compose 5.0.2, aws-cli 2.33.12).
 - An Amazon Web Services account with programmatic access enabled (Access Key ID and Secret Access Key) or an IAM role usable by Terraform.
 - An SSH public key registered in the account for EC2 key-pair creation, with the matching private key stored on your local workstation for SSH access.
 
-## Architecture (overview)
+## Architecture 
 High-level view of the target architecture and the main network flows between the client, the Filestash VM, and the S3-compatible Object Storage bucket.
 
 ```mermaid
@@ -93,8 +93,8 @@ flowchart TB
     EC2["EC2 instance stashcloud_ec2\nUbuntu"]
   end
 
-  subgraph APP["Target Host / Service"]
-    OS["OS provisioning\napt update and upgrade"]
+  subgraph APP["Service"]
+    OS["OS provisioning"]
     DOCKER["Docker Engine"]
     CT["Application container"]
     EP["Service endpoints <br>HTTP and HTTPS"]
@@ -111,6 +111,17 @@ flowchart TB
   EC2 --> OS --> DOCKER --> CT --> EP
   B["User / Browser"] -- HTTP or HTTPS --> EP
 ```
+
+```bash
+#Creates infrastructure
+cd ~/stashcloud/terraform
+terraform init
+terraform plan
+terraform apply
+
+#Instances installs and configuration
+cd ~/stashcloud/ansible
+ansible-playbook -i inventories/aws_ec2.yaml playbooks/provision_front.yml
 
 ## Security
 
