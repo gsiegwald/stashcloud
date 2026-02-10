@@ -69,7 +69,7 @@ Note: terraform/terraform.tfstate* and terraform/.terraform/ exist locally but a
 
 ## Provisionning
 
-
+### Provisioning Workflow (Terraform + Ansible)
 ```mermaid
 ---
 config:
@@ -112,6 +112,7 @@ flowchart TB
   B["User / Browser"] -- HTTP or HTTPS --> EP
 ```
 
+### Runbook
 ```bash
 #Creates infrastructure
 cd ~/stashcloud/terraform
