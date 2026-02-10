@@ -1,0 +1,12 @@
+services:
+  filestash:
+    image: machines/filestash:latest
+    container_name: filestash
+    ports:
+      - "8080:8334"
+    volumes:
+      - filestash_data:/app/data/state/
+    restart: unless-stopped
+
+volumes:
+  filestash_data: {}
