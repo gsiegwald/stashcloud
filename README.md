@@ -6,8 +6,6 @@ The infrastructure is automated with Terraform and Ansible.
 
 ## Prerequisites
 
-## Prerequisites
-
 * Local workstation (Linux) with the following tools installed:
 
   * Terraform (tested: 1.14.3)
@@ -36,24 +34,14 @@ The infrastructure is automated with Terraform and Ansible.
   ansible-galaxy collection install amazon.aws community.docker
   ```
 
-* AWS account access
+ * An AWS account with programmatic access enabled via an Access Key ID / Secret Access Key configured on your workstation (`aws configure`)
 
-  * An AWS account with programmatic access enabled via either:
-
-    * an Access Key ID / Secret Access Key configured on your workstation (`aws configure`)
-
-* SSH keypair
-
-  * A local SSH key (private key stored on your workstation, e.g. `~/.ssh/id_ed25519`)
-  * The matching public key available for EC2 key-pair creation 
+*  A local SSH key (private key stored on your workstation, e.g. `~/.ssh/id_ed25519`)
 
 * Network access
 
   * Outbound HTTPS access from your workstation to AWS APIs (Terraform + Ansible inventory)
-  * Ability to reach the EC2 instance over:
-
-    * SSH (22) from your local IP
-    * HTTP (80) from your browser (HTTPS 443 will be added later)
+  * Ability to reach the EC2 instance over SSH (22) and HTTP (80) (HTTPS 443 will be added later)
 
 ## Architecture 
 High-level view of the target architecture and the main network flows between the client, the Filestash VM, and the S3-compatible Object Storage bucket.
