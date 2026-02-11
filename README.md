@@ -5,9 +5,55 @@ This project deploys a web-based file management application on AWS, using Files
 The infrastructure is automated with Terraform and Ansible.
 
 ## Prerequisites
-- A local Linux machine with Terraform, Ansible, Docker, Docker Compose, AWS CLI, and Git installed (tested versions: Terraform 1.14.3, Ansible 2.10.8, Docker 29.2.0, Docker Compose 5.0.2, aws-cli 2.33.12).
-- An Amazon Web Services account with programmatic access enabled (Access Key ID and Secret Access Key) or an IAM role usable by Terraform.
-- An SSH public key registered in the account for EC2 key-pair creation, with the matching private key stored on your local workstation for SSH access.
+
+## Prerequisites
+
+* Local workstation (Linux) with the following tools installed:
+
+  * Terraform (tested: 1.14.3)
+  * Ansible (tested: 2.10.8)
+  * AWS CLI (tested: 2.33.12)
+  * Git
+  * Python 3 + pip (recommended to use a virtualenv)
+
+* Python dependencies on the control node (your local machine), required for the AWS dynamic inventory:
+
+  * `boto3`
+  * `botocore`
+
+* Ansible collections :
+
+  * `amazon.aws` (AWS EC2 dynamic inventory plugin)
+  * `community.docker` (Docker Compose v2 module)
+
+  Example:
+
+  ```bash
+  python3 -m venv .venv
+  source .venv/bin/activate
+  pip install -U pip
+  pip install boto3 botocore
+  ansible-galaxy collection install amazon.aws community.docker
+  ```
+
+* AWS account access
+
+  * An AWS account with programmatic access enabled via either:
+
+    * an Access Key ID / Secret Access Key configured on your workstation (`aws configure`)
+
+* SSH keypair
+
+  * A local SSH key (private key stored on your workstation, e.g. `~/.ssh/id_ed25519`)
+  * The matching public key available for EC2 key-pair creation 
+
+* Network access
+
+  * Outbound HTTPS access from your workstation to AWS APIs (Terraform + Ansible inventory)
+  * Ability to reach the EC2 instance over:
+
+    * SSH (22) from your local IP
+    * HTTP (80) from your browser (HTTPS 443 will be added later)
 
 ## Architecture 
 High-level view of the target architecture and the main network flows between the client, the Filestash VM, and the S3-compatible Object Storage bucket.
