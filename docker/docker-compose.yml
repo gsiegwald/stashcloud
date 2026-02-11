@@ -2,11 +2,28 @@ services:
   filestash:
     image: machines/filestash:latest
     container_name: filestash
-    ports:
-      - "8080:8334"
+    networks:
+      - stashnet
     volumes:
       - filestash_data:/app/data/state/
     restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    container_name: stashcloud-nginx
+    restart: unless-stopped
+    depends_on:
+      - filestash
+    networks:
+      - stashnet
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+
+networks:
+  stashnet:
+    driver: bridge
 
 volumes:
   filestash_data: {}
