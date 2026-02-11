@@ -39,7 +39,10 @@ The target architecture includes:
 stashcloud/
 ├─ .git/                         
 ├─ .gitignore                    # Ignore Terraform state/cache and any *.tfvars secrets
-├─ README.md                     
+├─ README.md
+├─ docker
+│  ├─ docker-compose.yml
+│  └─ nginx.conf                     
 ├─ ansible/                      
 │  ├─ ansible.cfg                # Ansible settings
 │  ├─ inventories/
@@ -121,8 +124,7 @@ terraform plan
 terraform apply
 
 #Instances installs and configuration
-cd ~/stashcloud/ansible
-ansible-playbook -i inventories/aws_ec2.yaml playbooks/provision_front.yml
+ansible-playbook -i ansible/inventories/aws_ec2.yaml playbooks/provision_front.yml
 ```
 
 ## Security
@@ -132,6 +134,7 @@ ansible-playbook -i inventories/aws_ec2.yaml playbooks/provision_front.yml
 Connect using your private key and the instance public IP from Terraform:
 
 ```bash
+cd ~/stashcloud/terraform
 ssh -i ~/.ssh/id_ed25519 ubuntu@$(terraform output -raw ec2_public_ip)
 ```
 
