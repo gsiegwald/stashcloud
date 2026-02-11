@@ -54,35 +54,3 @@
     groups: docker
     append: yes
   become: yes
-
-- name: Make sure /opt/stashcloud directory is present
-  file:
-    path: /opt/stashcloud
-    state: directory
-    owner: ubuntu     
-    group: ubuntu
-    mode: "0755"
-  become: yes
-
-- name: Copy docker directory (docker-compose.yml + nginx.conf)
-  copy:
-    src: "{{ playbook_dir }}/../../docker/"
-    dest: /opt/stashcloud/
-    owner: ubuntu
-    group: ubuntu
-    mode: "0644"
-  become: yes
-
-- name: Stop and remove stashcloud frontend stack if it already exists
-  community.docker.docker_compose_v2:
-    project_src: /opt/stashcloud
-    state: absent
-  become: true
-  ignore_errors: true
-
-- name: Deploy/Update nginx and filestash
-  community.docker.docker_compose_v2:
-    project_src: /opt/stashcloud
-    pull: always                  
-    state: present
-  become: yes
