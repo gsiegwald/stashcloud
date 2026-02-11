@@ -24,7 +24,7 @@ The infrastructure is automated with Terraform and Ansible.
   * `amazon.aws` (AWS EC2 dynamic inventory plugin)
   * `community.docker` (Docker Compose v2 module)
 
-  Example:
+  Example :
 
   ```bash
   python3 -m venv .venv
@@ -38,7 +38,7 @@ The infrastructure is automated with Terraform and Ansible.
 
 *  A local SSH key (private key stored on your workstation, e.g. `~/.ssh/id_ed25519`)
 
-* Network access
+* Network access :
 
   * Outbound HTTPS access from your workstation to AWS APIs (Terraform + Ansible inventory)
   * Ability to reach the EC2 instance over SSH (22) and HTTP (80) (HTTPS 443 will be added later)
@@ -47,17 +47,21 @@ The infrastructure is automated with Terraform and Ansible.
 High-level view of the target architecture and the main network flows between the client, the Filestash VM, and the S3-compatible Object Storage bucket.
 
 ```mermaid
-graph LR
-  %% -------- Infrastructure --------
-  subgraph "AWS (eu-west-3)"
-    EC2["EC2 Ubuntu<br/>Filestash Server<br/><i>(public subnet)</i>"]
-    S3["Amazon&nbsp;S3<br/>Bucket"]
+flowchart LR
+  %% Infrastructure
+  subgraph AWS["AWS"]
+    subgraph EC2["EC2 Ubuntu"]
+      NGINX["Nginx reverse proxy (Docker)"]
+      FS["Filestash (Docker)"]
+    end
+    S3["Amazon S3 bucket"]
   end
 
-  %% -------- Flow --------
-  UserPC["Client (Browser/SSH)"] -->|SSH&nbsp;22| EC2
-  UserPC -->|HTTP/HTTPS&nbsp;80/443| EC2
-  EC2 -->|S3&nbsp;API| S3
+  %% Network flows
+  User["Client"] -->|SSH 22| EC2
+  User -->|HTTP 80 / HTTPS 443| NGINX
+  NGINX -->|HTTP 8334| FS
+  FS -->|S3 API| S3
 ```
 
 
