@@ -75,37 +75,44 @@ The target architecture includes:
 
 ```text
 stashcloud/
-├─ .git/                         
-├─ .gitignore                    # Ignore Terraform state/cache and any *.tfvars secrets
-├─ README.md
-├─ docker
-│  ├─ docker-compose.yml
-│  └─ nginx.conf                     
-├─ ansible/                      
-│  ├─ ansible.cfg                # Ansible settings
-│  ├─ inventories/
-│  │  └─ aws_ec2.yaml            # Dynamic inventory (AWS EC2 plugin) + host compose
-│  ├─ group_vars/                # Group variables split by host groups
-│  │  ├─ backend/
-│  │  │  └─ main.yml             # Variables for backend hosts
-│  │  └─ frontend/
-│  │     └─ main.yml             # Variables for frontend hosts
-│  ├─ playbooks/
-│  │  ├─ provision_back.yml      # Backend provisioning playbook
-│  │  ├─ provision_front.yml     # Frontend provisioning playbook
-│  │  └─ site.yml                # Main entrypoint playbook (orchestrates roles/plays)
-│  └─ roles/
-│     └─ base/
-│        ├─ handlers/
-│        │  └─ main.yml          
-│        └─ tasks/
-│           └─ main.yml          # Base tasks (updates, Docker install, etc.)
-└─ terraform/                    
-   ├─ main.tf                    # Provider block, network, security group, EC2 resources
-   ├─ variable.tf                # Input variables (aws_region, admin_ip, etc.)
-   └─ .terraform.lock.hcl        
+├── .git/                       
+├── .gitignore                  # ignore state files, secrets, etc.
+├── README.md
+├── ansible.cfg                 # global Ansible configuration
+├── docker/                     
+│   ├── docker-compose.yml
+│   └── nginx.conf
+├── ansible/
+│   ├── inventories/
+│   │   └── aws_ec2.yaml        # dynamic inventory (AWS plugin)
+│   ├── group_vars/
+│   │   ├── backend/
+│   │   │   └── main.yml        # variables for backend hosts
+│   │   └── frontend/
+│   │       └── main.yml        # variables for frontend hosts
+│   ├── playbooks/
+│   │   ├── provision_back.yml  # provision S3 
+│   │   ├── provision_front.yml # provision Filestash + Nginx
+│   │   └── site.yml           
+│   └── roles/
+│       ├── base/               # OS hardening + Docker install
+│       │   ├── files/
+│       │   ├── handlers/
+│       │   │   └── main.yml
+│       │   └── tasks/
+│       │       └── main.yml
+│       └── frontend/           # Filestash & Nginx deployment
+│           ├── files/
+│           ├── handlers/
+│           └── tasks/
+│               └── main.yml
+└── terraform/
+    ├── main.tf                 # VPC, security group, EC2 instance
+    ├── variable.tf
+    └── .terraform.lock.hcl
+
  
-Note: terraform/terraform.tfstate* and terraform/.terraform/ exist locally but are intentionally ignored by Git for security concerns.
+Note: terraform/terraform.tfvars, terraform/terraform.tfstate* and terraform/.terraform/ exist locally but are intentionally ignored by Git for security concerns.
 ```
 
 ## Provisionning
