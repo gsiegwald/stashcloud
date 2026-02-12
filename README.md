@@ -62,6 +62,14 @@ flowchart LR
   User -->|HTTP 80 / HTTPS 443| NGINX
   NGINX -->|HTTP 8334| FS
   FS -->|S3 API| S3
+
+%% ---- Subgraph styling (backgrounds) ----
+style AWS fill:#F3F4F6,stroke:#CBD5E1,stroke-width:1px,color:#111827,font-size:15px,font-weight:bold
+style EC2 fill:#F3F4F6,stroke:#CBD5E1,stroke-width:1px,color:#111827,font-size:15px,font-weight:bold
+
+%% ---- Node styling ----
+classDef default  fill:#E8F1FF,stroke:#2563EB,stroke-width:1px,color:#111827;
+classDef fileNode fill:#F3E8FF,stroke:#7C3AED,stroke-width:1px,color:#111827;
 ```
 
 
@@ -124,10 +132,12 @@ config:
   layout: default
 ---
 flowchart TB
-  subgraph L["Local"]
+  subgraph L[" Local "]
     U["Admin workstation"]
     TF["Terraform local"]
     ANS["Ansible local"]
+    DC["docker/docker-compose.yml"]
+    NC["docker/Nginx.conf"]
   end
 
   subgraph CP["AWS APIs"]
@@ -141,11 +151,15 @@ flowchart TB
     EC2["EC2 instance stashcloud_ec2\nUbuntu"]
   end
 
-  subgraph APP["Service"]
+  subgraph APP["Service  "]
     OS["OS provisioning"]
-    DOCKER["Docker Engine"]
-    CT["Application container"]
+    DOCKER["Docker Engine + Compose v2"]
+    ST["stashnet (Docker network)"]
+    NGX["Nginx container"]
+    FLS["Filestash container"]
     EP["Service endpoints <br>HTTP and HTTPS"]
+    OPT["/opt/stashcloud/docker-compose.yml
+    /opt/stashcloud/Nginx.conf"]
   end
 
   U --> TF & ANS
@@ -156,8 +170,28 @@ flowchart TB
   ANS -- Query inventory by tags --> EC2API
   EC2API -- Return public IP --> ANS
   ANS -- SSH with key --> EC2
-  EC2 --> OS --> DOCKER --> CT --> EP
+
+  ANS -- Copy compose + Nginx.conf --> OPT
+  DC --> ANS
+  NC --> ANS
+
+  EC2 --> OS --> DOCKER --> ST
+  ST --> NGX --> EP
+  ST --> FLS
   B["User / Browser"] -- HTTP or HTTPS --> EP
+  DOCKER -. "docker compose reads config" .-> OPT
+
+%% ---- Subgraph styling (backgrounds) ----
+style L  fill:#F3F4F6,stroke:#949494,stroke-width:1px,color:#111827,font-size:15px,font-weight:bold
+style CP fill:#F3F4F6,stroke:#949494,stroke-width:1px,color:#111827,font-size:15px,font-weight:bold
+style DP fill:#F3F4F6,stroke:#949494,stroke-width:1px,color:#111827,font-size:15px,font-weight:bold
+style APP fill:#F3F4F6,stroke:#949494,stroke-width:1px,color:#111827,font-size:15px,font-weight:bold
+%% ---- Node styling ----
+classDef fileNode fill:#F3E8FF,stroke:#7C3AED,stroke-width:1px,color:#111827;
+classDef default  fill:#E8F1FF,stroke:#2563EB,stroke-width:1px,color:#111827;
+
+%% Apply file style to file nodes
+class DC,NC,OPT fileNode;
 ```
 
 
