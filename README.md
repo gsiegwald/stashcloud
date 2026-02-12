@@ -222,11 +222,6 @@ sudo docker compose -f /opt/stashcloud/docker-compose.yml down
 sudo docker compose -f /opt/stashcloud/docker-compose.yml up -d
 ```
 
-
-#Instances installs and configuration
-ansible-playbook -i ansible/inventories/aws_ec2.yaml playbooks/provision_front.yml
-```
-
 ## Security
 
 ### SSH access
