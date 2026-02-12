@@ -10,7 +10,7 @@ services:
 
   nginx:
     image: nginx:alpine
-    container_name: stashcloud-nginx
+    container_name: nginx
     restart: unless-stopped
     depends_on:
       - filestash
