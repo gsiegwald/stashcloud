@@ -160,13 +160,68 @@ flowchart TB
   B["User / Browser"] -- HTTP or HTTPS --> EP
 ```
 
+
 ### Runbook
+
+> **Note**: run the following commands from the repository root (`~/stashcloud`).
+
+#### 1) Provision infrastructure (Terraform)
+
 ```bash
-#Creates infrastructure
-cd ~/stashcloud/terraform
-terraform init
-terraform plan
-terraform apply
+terraform -chdir=terraform init
+terraform -chdir=terraform plan
+terraform -chdir=terraform apply
+```
+
+Get EC2 public IP :
+
+```bash
+terraform -chdir=terraform output -raw ec2_public_ip
+```
+
+#### 2) Configure the instance and deploy the frontend stack (Ansible)
+
+This playbook:
+
+* updates the OS packages,
+* installs Docker Engine and the Docker Compose v2 plugin,
+* copies `docker/docker-compose.yml` and `docker/nginx.conf` to `/opt/stashcloud/`,
+* deploys (or redeploys) the Filestash + Nginx stack using `docker compose`.
+
+```bash
+ansible-playbook -i ansible/inventories/aws_ec2.yaml ansible/playbooks/provision_front.yml
+```
+
+---
+
+### Validate the deployment
+
+#### 1) From your local machine
+
+```bash
+curl -v http://$(terraform -chdir=terraform output -raw ec2_public_ip)/
+```
+
+#### 2) From the EC2 instance
+
+```bash
+ssh -i ~/.ssh/id_ed25519 ubuntu@$(terraform -chdir=terraform output -raw ec2_public_ip)
+
+# Containers
+sudo docker ps
+
+# Logs
+sudo docker logs filestash
+sudo docker logs nginx
+```
+
+If you need a clean restart within the instance:
+
+```bash
+sudo docker compose -f /opt/stashcloud/docker-compose.yml down
+sudo docker compose -f /opt/stashcloud/docker-compose.yml up -d
+```
+
 
 #Instances installs and configuration
 ansible-playbook -i ansible/inventories/aws_ec2.yaml playbooks/provision_front.yml
