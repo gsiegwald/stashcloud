@@ -1,15 +1,26 @@
-# Terraform files to ignore
+# Terraform
 .terraform/
 *.tfstate*
-*.tfstate.backup*
-# Sensible files to ignore
+crash.log
+crash.*.log
+
+# Sensitive variable files
 *.tfvars*
+*.tfvars.json
+*.auto.tfvars*
+
+# Environment / secret
 .env
 vault.yml
+
 # Keys and certificates
 *.pem
 id_ed25519*
-# Misc.
+
+# Python / virtual environment
 __pycache__/
-#Python environment
 .venv/
+
+# Common system files
+.DS_Store
+Thumbs.db
