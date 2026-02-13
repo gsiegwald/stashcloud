@@ -199,18 +199,18 @@ class DC,NC,OPT fileNode;
 
 > **Note**: run the following commands from the repository root (`~/stashcloud`).
 
-#### 1) Provision infrastructure (Terraform)
+#### 1) Provision frontend infrastructure
 
 ```bash
-terraform -chdir=terraform init
-terraform -chdir=terraform plan
-terraform -chdir=terraform apply
+terraform -chdir=terraform/infra-frontend init
+terraform -chdir=terraform/infra-frontend plan
+terraform -chdir=terraform/infra-frontend apply
 ```
 
 Get EC2 public IP :
 
 ```bash
-terraform -chdir=terraform output -raw ec2_public_ip
+terraform -chdir=terraform/infra-fronted output -raw ec2_public_ip
 ```
 
 #### 2) Configure the instance and deploy the frontend stack (Ansible)
