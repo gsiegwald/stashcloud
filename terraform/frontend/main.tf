@@ -116,6 +116,9 @@ resource "aws_instance" "stashcloud_ec2" {
   subnet_id              = aws_subnet.public_subnet.id
   vpc_security_group_ids = [aws_security_group.web_sg.id]
   key_name               = aws_key_pair.admin_key.key_name
+  iam_instance_profile   = aws_iam_instance_profile.filestash_profile.name
+
+
 
   # IMDSv2 securisation
   metadata_options {
