@@ -2,31 +2,46 @@ provider "aws" {
   region = var.aws_region
 }
 
-variable "bucket_name" {
-  description = "gsiegwald-stashcloud-s3-bucket"
-  type        = string
-}
-
 resource "aws_s3_bucket" "stashcloud" {
   bucket = var.bucket_name
-  acl    = "private"
 
   tags = {
     Name        = "stashcloud-bucket"
     Environment = "dev"
   }
+}
 
-  versioning { enabled = true }
+resource "aws_s3_bucket_versioning" "stashcloud_versioning" {
+  bucket = aws_s3_bucket.stashcloud.id
 
-  server_side_encryption_configuration {
-    rule { apply_server_side_encryption_by_default { sse_algorithm = "AES256" } }
+  versioning_configuration {
+    status = "Enabled"
   }
+}
 
-  lifecycle_rule {
-    id                                   = "CleanupDeleteMarkers"
-    enabled                              = true
-    abort_incomplete_multipart_upload_days = 7
-    noncurrent_version_expiration { noncurrent_days = 90 }
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "stashcloud_sse" {
+  bucket = aws_s3_bucket.stashcloud.id
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "stashcloud_lifecycle" {
+  bucket = aws_s3_bucket.stashcloud.id
+  rule {
+    id     = "cleanup-delete-markers"
+    status = "Enabled"
+
+    abort_incomplete_multipart_upload {
+      days_after_initiation = 7
+    }
+
+    noncurrent_version_expiration {
+      noncurrent_days = 90
+    }
   }
 }
 

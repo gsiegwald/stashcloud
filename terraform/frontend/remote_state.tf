@@ -1,8 +1,9 @@
-#data "terraform_remote_state" "backend" {
-#  backend = "local"
-#  config  = { path = "../backend/terraform.tfstate" }
-#}
+data "terraform_remote_state" "backend" {
+  backend = "local"
+  config  = { path = "../backend/terraform.tfstate" }
+}
 
-#locals {
-#  bucket_arn = data.terraform_remote_state.backend.outputs.bucket_arn
-#}
+locals {
+  bucket_arn    = data.terraform_remote_state.backend.outputs.bucket_arn
+  s3_policy_arn = data.terraform_remote_state.backend.outputs.s3_policy_arn
+}
