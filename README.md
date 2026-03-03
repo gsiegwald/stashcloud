@@ -138,13 +138,12 @@ stashcloud/
     │   ├── variable.tf
     │   └── local.tfvars.example# local admin IP 
     └── shared.tfvars.example   # shared variables across Terraform stacks
-
+```
 Note: 
 * terraform/*/terraform.tfstate* and terraform/*/.terraform/ exist locally but are intentionally ignored by Git for security concerns.
 
 * terraform/shared.tfvars and terraform/frontend/local.tfvars are intentionally kept local-only for security concerns. The repository includes *.tfvars.example files (terraform/shared.tfvars.example, terraform/frontend/local.tfvars.example) as templates to document the required variables.
 
-```
 
 ## Provisionning
 
