@@ -1,0 +1,2 @@
+# terraform/terraform.tfvars
+admin_ip = "X.X.X.X/32"
