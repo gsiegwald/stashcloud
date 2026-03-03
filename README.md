@@ -147,7 +147,8 @@ Note:
 
 ## Provisionning
 
-### Provisioning Workflow (Terraform + Ansible)
+### Terraform Workflow
+
 ```mermaid
 flowchart TB
   subgraph L[" Local "]
@@ -155,9 +156,6 @@ flowchart TB
     TF["Terraform local"]
     TFB["Terraform apply<br/>terraform/backend"]
     TFF["Terraform apply<br/>terraform/frontend"]
-    ANS["Ansible local"]
-    DC["docker/docker-compose.yml"]
-    NC["docker/Nginx.conf"]
   end
 
   subgraph BK["AWS Resources : Backend"]
@@ -179,18 +177,7 @@ flowchart TB
     EC2["EC2 instance stashcloud_ec2\nUbuntu"]
   end
 
-  subgraph APP["Service  "]
-    OS["OS provisioning"]
-    DOCKER["Docker Engine + Compose v2"]
-    ST["stashnet (Docker network)"]
-    NGX["Nginx container"]
-    FLS["Filestash container"]
-    EP["Service endpoints <br>HTTP and HTTPS"]
-    OPT["/opt/stashcloud/docker-compose.yml
-    /opt/stashcloud/Nginx.conf"]
-  end
-
-  U --> TF & ANS
+  U --> TF
   TF --> TFB
   TF -- "backend already provisioned" --> TFF
 
@@ -214,11 +201,52 @@ flowchart TB
   S3POL -- "attach policy" --> IAMROLE
   LOGPOL -- "attach policy" --> IAMROLE
 
-  ANS -- Query inventory by tags --> EC2
-  EC2 -- Return public IP --> ANS
-  ANS -- SSH with key --> EC2
+%% ---- Subgraph styling (backgrounds) ----
+style L  fill:#F3F4F6,stroke:#949494,stroke-width:1px,color:#111827,font-size:15px,font-weight:bold
+style BK fill:#F3F4F6,stroke:#949494,stroke-width:1px,color:#111827,font-size:15px,font-weight:bold
+style FR fill:#F3F4F6,stroke:#949494,stroke-width:1px,color:#111827,font-size:15px,font-weight:bold
+%% ---- Node styling ----
+classDef fileNode fill:#F3E8FF,stroke:#7C3AED,stroke-width:1px,color:#111827;
+classDef default  fill:#E8F1FF,stroke:#2563EB,stroke-width:1px,color:#111827;
+classDef anchorNode fill:transparent,stroke:transparent,stroke-width:0px,color:transparent;
+```
 
-  ANS -- Copy compose + Nginx.conf --> OPT
+### Ansible Workflow
+
+```mermaid
+flowchart TB
+  subgraph L[" Local "]
+    U["Admin workstation"]
+    ANS["Ansible local"]
+    DC["docker/docker-compose.yml"]
+    NC["docker/Nginx.conf"]
+  end
+
+  subgraph FR["AWS Resources : Frontend"]
+    direction TB
+
+    EC2["EC2 instance stashcloud_ec2\nUbuntu"]
+  end
+
+  subgraph APP["Service  "]
+    OS["OS provisioning"]
+    DOCKER["Docker Engine + Compose v2"]
+    ST["stashnet (Docker network)"]
+    NGX["Nginx container"]
+    FLS["Filestash container"]
+    EP["Service endpoints <br>HTTP and HTTPS"]
+    OPT["/opt/stashcloud/docker-compose.yml
+    /opt/stashcloud/Nginx.conf"]
+  end
+
+  U --> ANS
+
+  ANS -- "query IP" <--> FR
+
+
+  ANS -- "SSH with key" --> EC2
+
+  ANS -- "copy compose + Nginx.conf" --> OPT
   DC --> ANS
   NC --> ANS
 
@@ -228,11 +256,8 @@ flowchart TB
   B["User / Browser"] -- HTTP or HTTPS --> EP
   DOCKER -. "docker compose reads config" .-> OPT
 
-
-
 %% ---- Subgraph styling (backgrounds) ----
 style L  fill:#F3F4F6,stroke:#949494,stroke-width:1px,color:#111827,font-size:15px,font-weight:bold
-style BK fill:#F3F4F6,stroke:#949494,stroke-width:1px,color:#111827,font-size:15px,font-weight:bold
 style FR fill:#F3F4F6,stroke:#949494,stroke-width:1px,color:#111827,font-size:15px,font-weight:bold
 style APP fill:#F3F4F6,stroke:#949494,stroke-width:1px,color:#111827,font-size:15px,font-weight:bold
 %% ---- Node styling ----
@@ -242,9 +267,7 @@ classDef anchorNode fill:transparent,stroke:transparent,stroke-width:0px,color:t
 
 %% Apply file style to file nodes
 class DC,NC,OPT fileNode;
-
 ```
-
 
 ### Runbook
 
