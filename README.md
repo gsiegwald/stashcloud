@@ -149,27 +149,33 @@ Note:
 
 ### Provisioning Workflow (Terraform + Ansible)
 ```mermaid
----
-config:
-  layout: default
----
 flowchart TB
   subgraph L[" Local "]
     U["Admin workstation"]
     TF["Terraform local"]
+    TFB["Terraform apply<br/>terraform/backend"]
+    TFF["Terraform apply<br/>terraform/frontend"]
     ANS["Ansible local"]
     DC["docker/docker-compose.yml"]
     NC["docker/Nginx.conf"]
   end
 
-  subgraph CP["AWS APIs"]
-    VPCAPI["VPC API"]
-    EC2API["EC2 API"]
+  subgraph BK["AWS Resources : Backend"]
+    direction TB
+    BKRES["Backend resources"]
+    S3B["S3 bucket (backend)"]
+    S3POL["IAM policy (S3 access)"]
   end
 
-  subgraph DP["AWS Resources"]
+  subgraph FR["AWS Resources : Frontend"]
+    direction TB
+    FRRES["Frontend resources"]
     VPC["VPC / Subnets / Internet Gateway / Route Tables"]
     SG["Security Group"]
+    IAMROLE["IAM role (EC2)"]
+    IAMPF["Instance profile"]
+    LOGPOL["IAM policy (CloudWatch Logs)"]
+    CWLG["CloudWatch Logs<br/>Log Group: /stashcloud/containers"]
     EC2["EC2 instance stashcloud_ec2\nUbuntu"]
   end
 
@@ -185,12 +191,31 @@ flowchart TB
   end
 
   U --> TF & ANS
-  TF -- AWS API over HTTPS --> VPCAPI & EC2API
-  VPCAPI --> VPC
-  EC2API --> SG & EC2
-  SG --- EC2
-  ANS -- Query inventory by tags --> EC2API
-  EC2API -- Return public IP --> ANS
+  TF --> TFB
+  TF -- "backend already provisioned" --> TFF
+
+  TFB -- "apply backend" --> BKRES
+  BKRES -- "create" --> S3B
+  BKRES -- "create" --> S3POL
+
+  TFB -- "terraform_remote_state outputs" --> TFF
+
+  TFF -- "apply frontend" --> FRRES
+  FRRES -- "create" --> VPC
+  FRRES -- "create" --> SG
+  FRRES -- "create" --> EC2
+  FRRES -- "create" --> IAMROLE
+  FRRES -- "create" --> IAMPF
+  FRRES -- "create" --> LOGPOL
+  FRRES -- "create" --> CWLG
+
+  SG -- "attach" --> EC2
+  IAMROLE -- "associate" --> IAMPF -- "attach" --> EC2
+  S3POL -- "attach policy" --> IAMROLE
+  LOGPOL -- "attach policy" --> IAMROLE
+
+  ANS -- Query inventory by tags --> EC2
+  EC2 -- Return public IP --> ANS
   ANS -- SSH with key --> EC2
 
   ANS -- Copy compose + Nginx.conf --> OPT
@@ -203,17 +228,21 @@ flowchart TB
   B["User / Browser"] -- HTTP or HTTPS --> EP
   DOCKER -. "docker compose reads config" .-> OPT
 
+
+
 %% ---- Subgraph styling (backgrounds) ----
 style L  fill:#F3F4F6,stroke:#949494,stroke-width:1px,color:#111827,font-size:15px,font-weight:bold
-style CP fill:#F3F4F6,stroke:#949494,stroke-width:1px,color:#111827,font-size:15px,font-weight:bold
-style DP fill:#F3F4F6,stroke:#949494,stroke-width:1px,color:#111827,font-size:15px,font-weight:bold
+style BK fill:#F3F4F6,stroke:#949494,stroke-width:1px,color:#111827,font-size:15px,font-weight:bold
+style FR fill:#F3F4F6,stroke:#949494,stroke-width:1px,color:#111827,font-size:15px,font-weight:bold
 style APP fill:#F3F4F6,stroke:#949494,stroke-width:1px,color:#111827,font-size:15px,font-weight:bold
 %% ---- Node styling ----
 classDef fileNode fill:#F3E8FF,stroke:#7C3AED,stroke-width:1px,color:#111827;
 classDef default  fill:#E8F1FF,stroke:#2563EB,stroke-width:1px,color:#111827;
+classDef anchorNode fill:transparent,stroke:transparent,stroke-width:0px,color:transparent;
 
 %% Apply file style to file nodes
 class DC,NC,OPT fileNode;
+
 ```
 
 
