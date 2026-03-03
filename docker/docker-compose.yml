@@ -8,6 +8,14 @@ services:
       - filestash_data:/app/data/state/
     restart: unless-stopped
 
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: /stashcloud/containers
+        awslogs-region: ${AWS_REGION:-eu-west-3}
+        awslogs-create-group: "true"
+        awslogs-stream: filestash
+
   nginx:
     image: nginx:alpine
     container_name: nginx
@@ -20,6 +28,14 @@ services:
       - "80:80"
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: /stashcloud/containers
+        awslogs-region: ${AWS_REGION:-eu-west-3}
+        awslogs-create-group: "true"
+        awslogs-stream: nginx
 
 networks:
   stashnet:

@@ -18,6 +18,7 @@ The infrastructure is automated with Terraform and Ansible.
 
   * `boto3`
   * `botocore`
+  * `jmespath`
 
 * Ansible collections :
 
@@ -30,11 +31,15 @@ The infrastructure is automated with Terraform and Ansible.
   python3 -m venv .venv
   source .venv/bin/activate
   pip install -U pip
-  pip install boto3 botocore
+  pip install boto3 botocore jmespath
   ansible-galaxy collection install amazon.aws community.docker
   ```
 
  * An AWS account with programmatic access enabled via an Access Key ID / Secret Access Key configured on your workstation (`aws configure`)
+
+* The AWS credentials used on the workstation must allow managing VPC/EC2/EIP, S3, IAM (roles/policies/instance profiles) and CloudWatch Logs
+
+* No AWS static keys are required on the EC2 instance: access to S3 and CloudWatch Logs is provided via the EC2 instance profile (IAM role) and IMDSv2.
 
 *  A local SSH key (private key stored on your workstation, e.g. `~/.ssh/id_ed25519`)
 
@@ -55,6 +60,7 @@ flowchart LR
       FS["Filestash (Docker)"]
     end
     S3["Amazon S3 bucket"]
+    CWL["CloudWatch Logs<br/>Log Group: /stashcloud/containers"]
   end
 
   %% Network flows
@@ -63,31 +69,36 @@ flowchart LR
   NGINX -->|HTTP 8334| FS
   FS -->|S3 API| S3
 
-%% ---- Subgraph styling (backgrounds) ----
-style AWS fill:#F3F4F6,stroke:#CBD5E1,stroke-width:1px,color:#111827,font-size:15px,font-weight:bold
-style EC2 fill:#F3F4F6,stroke:#CBD5E1,stroke-width:1px,color:#111827,font-size:15px,font-weight:bold
+  %% Centralized logging flows
+  NGINX -->|Logs over HTTPS - awslogs driver| CWL
+  FS -->|Logs over HTTPS - awslogs driver| CWL
 
-%% ---- Node styling ----
-classDef default  fill:#E8F1FF,stroke:#2563EB,stroke-width:1px,color:#111827;
-classDef fileNode fill:#F3E8FF,stroke:#7C3AED,stroke-width:1px,color:#111827;
+  %% ---- Subgraph styling (backgrounds) ----
+  style AWS fill:#F3F4F6,stroke:#CBD5E1,stroke-width:1px,color:#111827,font-size:15px,font-weight:bold
+  style EC2 fill:#F3F4F6,stroke:#CBD5E1,stroke-width:1px,color:#111827,font-size:15px,font-weight:bold
+
+  %% ---- Node styling ----
+  classDef default  fill:#E8F1FF,stroke:#2563EB,stroke-width:1px,color:#111827;
+  classDef fileNode fill:#F3E8FF,stroke:#7C3AED,stroke-width:1px,color:#111827;
 ```
 
-
 The target architecture includes:
-- An Ubuntu Public Cloud instance (VM) to host Filestash and an Nginx server.
-- A Filestash Docker container (web application) accessible through Nginx (which will act as an HTTPS reverse proxy).
-- An Amazon S3 bucket to store uploaded files.
 
+* An Ubuntu Public Cloud instance (VM) to host Filestash and an Nginx server.
+* A Filestash Docker container (web application) accessible through Nginx (which will act as an HTTPS reverse proxy).
+* An Amazon S3 bucket to store uploaded files.
+* Centralized logging to Amazon CloudWatch Logs for both Nginx and Filestash (Docker `awslogs` log driver).
 
 ## Repository structure
 
 ```text
+
 stashcloud/
-├── .git/                       
+├── .git/
 ├── .gitignore                  # ignore state files, secrets, etc.
 ├── README.md
 ├── ansible.cfg                 # global Ansible configuration
-├── docker/                     
+├── docker/
 │   ├── docker-compose.yml
 │   └── nginx.conf
 ├── ansible/
@@ -99,9 +110,9 @@ stashcloud/
 │   │   └── frontend/
 │   │       └── main.yml        # variables for frontend hosts
 │   ├── playbooks/
-│   │   ├── provision_back.yml  # provision S3 
+│   │   ├── provision_back.yml  # provision S3
 │   │   ├── provision_front.yml # provision Filestash + Nginx
-│   │   └── site.yml           
+│   │   └── site.yml
 │   └── roles/
 │       ├── base/               # OS hardening + Docker install
 │       │   ├── files/
@@ -115,12 +126,24 @@ stashcloud/
 │           └── tasks/
 │               └── main.yml
 └── terraform/
-    ├── main.tf                 # VPC, security group, EC2 instance
-    ├── variable.tf
-    └── .terraform.lock.hcl
+    ├── backend/                # S3 bucket + IAM policy
+    │   ├── s3.tf
+    │   ├── iam.tf
+    │   └── variables.tf
+    ├── frontend/               # VPC + EC2 + IAM role/profile + CloudWatch logs
+    │   ├── main.tf
+    │   ├── iam.tf
+    │   ├── logs.tf
+    │   ├── remote_state.tf     # read backend outputs (bucket ARN, policy ARN)
+    │   ├── variable.tf
+    │   └── local.tfvars.example# local admin IP 
+    └── shared.tfvars.example   # shared variables across Terraform stacks
 
- 
-Note: terraform/terraform.tfvars, terraform/terraform.tfstate* and terraform/.terraform/ exist locally but are intentionally ignored by Git for security concerns.
+Note: 
+* terraform/*/terraform.tfstate* and terraform/*/.terraform/ exist locally but are intentionally ignored by Git for security concerns.
+
+* terraform/shared.tfvars and terraform/frontend/local.tfvars are intentionally kept local-only for security concerns. The repository includes *.tfvars.example files (terraform/shared.tfvars.example, terraform/frontend/local.tfvars.example) as templates to document the required variables.
+
 ```
 
 ## Provisionning
