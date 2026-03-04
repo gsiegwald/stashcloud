@@ -271,8 +271,6 @@ class DC,NC,OPT fileNode;
 
 ### Runbook
 
----
-
 > **Note**: run the following commands from the repository root (`~/stashcloud`).
 
 #### 1) Provision backend infrastructure (Terraform)
