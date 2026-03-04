@@ -229,7 +229,7 @@ flowchart TB
   end
 
   subgraph APP["Service  "]
-    OS["OS provisioning"]
+    OS["OS updates"]
     DOCKER["Docker Engine + Compose v2"]
     ST["stashnet (Docker network)"]
     NGX["Nginx container"]
@@ -273,12 +273,18 @@ class DC,NC,OPT fileNode;
 
 > **Note**: run the following commands from the repository root (`~/stashcloud`).
 
-#### 1) Provision frontend infrastructure
+#### 1) Provision backend infrastructure (Terraform)
+
+terraform -chdir=terraform/backend init -var-file=../shared.tfvars 
+terraform -chdir=terraform/backend plan -var-file=../shared.tfvars 
+terraform -chdir=terraform/backend apply -var-file=../shared.tfvars 
+
+#### 2) Provision frontend infrastructure (Terraform)
 
 ```bash
-terraform -chdir=terraform/infra-frontend init
-terraform -chdir=terraform/infra-frontend plan
-terraform -chdir=terraform/infra-frontend apply
+terraform -chdir=terraform/frontend init  -var-file=../shared.tfvars -var-file=local.tfvars
+terraform -chdir=terraform/frontend plan  -var-file=../shared.tfvars -var-file=local.tfvars
+terraform -chdir=terraform/frontend apply  -var-file=../shared.tfvars -var-file=local.tfvars
 ```
 
 Get EC2 public IP :
@@ -287,7 +293,7 @@ Get EC2 public IP :
 terraform -chdir=terraform/infra-fronted output -raw ec2_public_ip
 ```
 
-#### 2) Configure the instance and deploy the frontend stack (Ansible)
+#### 3) Configure the instance and deploy the frontend stack (Ansible)
 
 This playbook:
 
@@ -300,20 +306,29 @@ This playbook:
 ansible-playbook -i ansible/inventories/aws_ec2.yaml ansible/playbooks/provision_front.yml
 ```
 
+#### 4) If needed : Delete the frontend and backend infrastructures
+terraform -chdir=terraform/frontend destroy -var-file=../shared.tfvars -var-file=local.tfvars
+
+terraform -chdir=terraform/backend destroy -var-file=../shared.tfvars
+
 ---
 
 ### Validate the deployment
 
 #### 1) From your local machine
 
+Test access to the remote instance via http :
 ```bash
 curl -v http://$(terraform -chdir=terraform output -raw ec2_public_ip)/
 ```
 
-#### 2) From the EC2 instance
+Connect using your private key and the instance public IP obtained from Terraform :
 
 ```bash
-ssh -i ~/.ssh/id_ed25519 ubuntu@$(terraform -chdir=terraform output -raw ec2_public_ip)
+ssh -i ~/.ssh/id_ed25519 ubuntu@$(terraform -chdir=terraform/frontend output -raw ec2_public_ip)
+```
+
+#### 2) From the EC2 instance
 
 # Containers
 sudo docker ps
@@ -332,20 +347,17 @@ sudo docker compose -f /opt/stashcloud/docker-compose.yml up -d
 
 ## Security
 
-### SSH access
-
-Connect using your private key and the instance public IP from Terraform:
-
-```bash
-cd ~/stashcloud/terraform
-ssh -i ~/.ssh/id_ed25519 ubuntu@$(terraform output -raw ec2_public_ip)
-```
-
 ### Measures already in place
 
-* SSH restricted to `admin_ip` via the security group (port 22 allowed only from your /32).
-* No password authentication: the Ubuntu image uses key-based SSH only by default.
-* IMDSv2 enforced: metadata access requires a session token.
+* **SSH restricted to `admin_ip` via the Security Group** (port 22 allowed only from your /32).
+* **No password authentication**: the Ubuntu image uses key-based SSH only by default.
+* **IMDSv2 enforced**: instance metadata access requires a session token (no IMDSv1).
+* **No static AWS keys on the EC2 instance**: access to AWS services is provided through an IAM Role
+* **Least-privilege IAM policies**:
+
+  * **S3 access policy** (created by the *backend* stack) grants only the required permissions on the dedicated bucket (e.g., list/read/write objects), and is attached to the EC2 role by the *frontend* stack.
+  * **CloudWatch Logs policy** (created by the *frontend* stack) grants only the required permissions to publish container logs to CloudWatch Logs.
+* **Centralized logging to CloudWatch Logs**: Nginx and Filestash containers use the Docker `awslogs` driver to ship logs over HTTPS to the log group `/stashcloud/containers` (log group managed by Terraform).
 
 ## Current project status
 
