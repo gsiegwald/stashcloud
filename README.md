@@ -311,7 +311,7 @@ terraform -chdir=terraform/frontend destroy -var-file=../shared.tfvars -var-file
 
 terraform -chdir=terraform/backend destroy -var-file=../shared.tfvars
 
-### Validate the deployment
+### Validate the deployment :
 
 #### 1) From your local machine
 
