@@ -330,6 +330,7 @@ ssh -i ~/.ssh/id_ed25519 ubuntu@$(terraform -chdir=terraform/frontend output -ra
 
 #### 2) From the EC2 instance
 
+```bash
 # Containers
 sudo docker ps
 
