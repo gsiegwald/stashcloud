@@ -147,7 +147,7 @@ Note:
 
 ## Provisionning
 
-### Terraform Workflow
+### Terraform Workflow :
 
 ```mermaid
 flowchart TB
@@ -211,7 +211,7 @@ classDef default  fill:#E8F1FF,stroke:#2563EB,stroke-width:1px,color:#111827;
 classDef anchorNode fill:transparent,stroke:transparent,stroke-width:0px,color:transparent;
 ```
 
-### Ansible Workflow
+### Ansible Workflow :
 
 ```mermaid
 flowchart TB
@@ -269,7 +269,7 @@ classDef anchorNode fill:transparent,stroke:transparent,stroke-width:0px,color:t
 class DC,NC,OPT fileNode;
 ```
 
-### Runbook
+### Runbook :
 
 > **Note**: run the following commands from the repository root (`~/stashcloud`).
 
