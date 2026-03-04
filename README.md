@@ -271,6 +271,8 @@ class DC,NC,OPT fileNode;
 
 ### Runbook
 
+---
+
 > **Note**: run the following commands from the repository root (`~/stashcloud`).
 
 #### 1) Provision backend infrastructure (Terraform)
@@ -310,8 +312,6 @@ ansible-playbook -i ansible/inventories/aws_ec2.yaml ansible/playbooks/provision
 terraform -chdir=terraform/frontend destroy -var-file=../shared.tfvars -var-file=local.tfvars
 
 terraform -chdir=terraform/backend destroy -var-file=../shared.tfvars
-
----
 
 ### Validate the deployment
 
