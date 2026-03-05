@@ -54,3 +54,6 @@
     groups: docker
     append: yes
   become: yes
+
+- import_tasks: awscli.yml
+  tags: awscli

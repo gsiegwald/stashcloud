@@ -292,7 +292,7 @@ terraform -chdir=terraform/frontend apply  -var-file=../shared.tfvars -var-file=
 Get EC2 public IP :
 
 ```bash
-terraform -chdir=terraform/infra-fronted output -raw ec2_public_ip
+terraform -chdir=terraform/frontend output -raw ec2_public_ip
 ```
 
 #### 3) Configure the instance and deploy the frontend stack (Ansible)

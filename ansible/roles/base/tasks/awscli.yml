@@ -1,0 +1,38 @@
+---
+# Install AWS CLI v2 
+- name: Install curl and unzip
+  apt:
+    name:
+      - curl
+      - unzip
+    state: present
+    update_cache: yes
+  become: true
+
+- name: Download zip for AWS CLI v2
+  get_url:
+    url: https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip
+    dest: /tmp/awscliv2.zip
+    mode: '0644'
+    force: no
+  become: true
+
+- name: Unzip zip file
+  unarchive:
+    src: /tmp/awscliv2.zip
+    dest: /tmp/
+    remote_src: yes
+    creates: /tmp/aws
+  become: true
+
+- name: Launch AWS CLI v2 install
+  command: /tmp/aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
+  args:
+    creates: /usr/local/bin/aws
+  become: true
+
+- name: Remove awscliv2.zip
+  file:
+    path: /tmp/awscliv2.zip
+    state: absent
+  become: true
