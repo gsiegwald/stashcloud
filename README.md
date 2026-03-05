@@ -275,9 +275,11 @@ class DC,NC,OPT fileNode;
 
 #### 1) Provision backend infrastructure (Terraform)
 
+```bash
 terraform -chdir=terraform/backend init -var-file=../shared.tfvars 
 terraform -chdir=terraform/backend plan -var-file=../shared.tfvars 
 terraform -chdir=terraform/backend apply -var-file=../shared.tfvars 
+```
 
 #### 2) Provision frontend infrastructure (Terraform)
 
