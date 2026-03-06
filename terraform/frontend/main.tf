@@ -155,11 +155,3 @@ resource "aws_eip_association" "stashcloud_eip_association" {
   instance_id   = aws_instance.stashcloud_ec2.id
 }
 
-####################################
-# Outputs
-####################################
-
-output "ec2_public_ip" {
-  description = "EC2 public IP adress"
-  value       = aws_eip.stashcloud_eip.public_ip
-}
