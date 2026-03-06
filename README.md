@@ -1,8 +1,12 @@
 # Stashcloud – Lightweight Cloud Storage Manager
 
-This project deploys a web-based file management application on AWS, using Filestash as the web interface and Amazon S3 (Object Storage) for file storage.
+Stashcloud is a lightweight, self-hosted shared drive for teams, families, or groups of friends.
 
-The infrastructure is automated with Terraform and Ansible.
+It lets you manage files from a web browser without relying on Google Drive/Dropbox-like services or sharing storage access credentials with end users.
+
+Using Filestash as the web interface and an S3 bucket as the file repository, the stack is provisioned end-to-end securely with Terraform + Ansible.
+
+
 
 ## Prerequisites
 
@@ -309,9 +313,13 @@ ansible-playbook -i ansible/inventories/aws_ec2.yaml ansible/playbooks/provision
 ```
 
 #### 4) If needed : Delete the frontend and backend infrastructures
+
+```bash
 terraform -chdir=terraform/frontend destroy -var-file=../shared.tfvars -var-file=local.tfvars
 
 terraform -chdir=terraform/backend destroy -var-file=../shared.tfvars
+```
+
 
 ### Validate the deployment :
 
@@ -345,6 +353,73 @@ If you need a clean restart within the instance:
 sudo docker compose -f /opt/stashcloud/docker-compose.yml down
 sudo docker compose -f /opt/stashcloud/docker-compose.yml up -d
 ```
+
+## Filestash setup (admin, users, S3 backend connection)
+
+### 1) Open the Filestash admin console
+
+1. In a web browser, open:
+   `http://<EC2_PUBLIC_IP>/admin/setup`
+
+2. Set the Filestash admin password.
+
+> **Screenshot:** Filestash admin password setup
+
+If the admin password is already configured, open:
+`http://<EC2_PUBLIC_IP>/admin`
+and sign in with the admin password.
+
+---
+
+### 2) Configure S3 as the storage backend
+
+1. In the admin console, go to the Storage configuration (left panel).
+2. Select S3 as storage backend, remove others if needed.
+
+> **Screenshot:** Select S3 storage backend
+
+---
+
+### 3) Create Filestash users
+
+Under `Authentification Middleware`, select `HTPASSWD` , fefine a username and password for each user who will access the drive.
+
+> **Screenshot:** User credentials creation
+
+---
+
+### 4) Connect the S3 bucket
+
+You will need the S3 access credentials and the IAM role information used by the instance.
+
+**Get the S3 Access Key and Secret Key (if applicable):**
+
+```bash
+cat ~/.aws/credentials
+```
+
+**Get the AWS region**
+
+```bash
+cat terraform/shared.tfvars
+```
+
+**Get the EC2 IAM role ARN:**
+
+```bash
+terraform -chdir=terraform/frontend output -raw ec2_role_arn
+```
+In the box `Attribute Mapping`, enter the required S3 settings (access and secret key, AWS region, IAM role ARN).
+
+> **Screenshot:** S3 bucket connection settings
+
+---
+
+### 5) Sign in as a user
+
+1. Go back to the Filestash login page:
+   `http://<EC2_PUBLIC_IP>/`
+2. Sign in using one of the user accounts created earlier to access the file manager interface.
 
 ## Security
 
