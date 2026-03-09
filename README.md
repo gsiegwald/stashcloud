@@ -361,7 +361,7 @@ sudo docker compose -f /opt/stashcloud/docker-compose.yml up -d
 1. In a web browser, open:
    `http://<EC2_PUBLIC_IP>/admin/setup`
 
-2. Set the Filestash admin password.
+2. Set the Filestash admin password (see below)
 
 ![Filestash admin password setup](docs/screenshots/admin_password_filestash.png)
 
@@ -374,9 +374,9 @@ and sign in with the admin password.
 ### 2) Configure S3 as the storage backend
 
 1. In the admin console, go to the Storage configuration (left panel).
-2. Select S3 as storage backend, remove others if needed.
+2. Select S3 as storage backend, remove others if needed (see below)
 
-> **Screenshot:** Select S3 storage backend
+![Select S3 storage backend](docs/screenshots/chose_storage_backend_filestash.png)
 
 ---
 
@@ -384,8 +384,7 @@ and sign in with the admin password.
 
 Under `Authentification Middleware`, select `HTPASSWD` , fefine a username and password for each user who will access the drive.
 
-> **Screenshot:** User credentials creation
-
+![Select S3 storage backend](docs/screenshots/chose_storage_backend_filestash.png)
 ---
 
 ### 4) Connect the S3 bucket
@@ -411,8 +410,7 @@ terraform -chdir=terraform/frontend output -raw ec2_role_arn
 ```
 In the box `Attribute Mapping`, enter the required S3 settings (access and secret key, AWS region, IAM role ARN).
 
-> **Screenshot:** S3 bucket connection settings
-
+![S3 bucket connection settings](docs/screenshots/S3_connection_configuration_filestash.png)
 ---
 
 ### 5) Sign in as a user
