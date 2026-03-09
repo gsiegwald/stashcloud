@@ -376,7 +376,7 @@ and sign in with the admin password.
 1. In the admin console, go to the Storage configuration (left panel).
 2. Select S3 as storage backend, remove others if needed (see below)
 
-![Select S3 storage backend](docs/screenshots/chose_storage_backend_filestash.png)
+![Select S3 storage backend](docs/screenshots/choose_storage_backend_filestash.png)
 
 ---
 
@@ -384,7 +384,7 @@ and sign in with the admin password.
 
 Under `Authentification Middleware`, select `HTPASSWD` , fefine a username and password for each user who will access the drive.
 
-![Select S3 storage backend](docs/screenshots/chose_storage_backend_filestash.png)
+![User credentials setup](docs/screenshots/user_credentials_setup_filestash.png)
 ---
 
 ### 4) Connect the S3 bucket
