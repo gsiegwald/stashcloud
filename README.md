@@ -374,7 +374,7 @@ and sign in with the admin password.
 ### 2) Configure S3 as the storage backend
 
 1. In the admin console, go to the Storage configuration (left panel).
-2. Select S3 as storage backend, remove others if needed (see below)
+2. Select S3 as storage backend, remove others if needed (see below).
 
 ![Select S3 storage backend](docs/screenshots/choose_storage_backend_filestash.png)
 
@@ -382,7 +382,7 @@ and sign in with the admin password.
 
 ### 3) Create Filestash users
 
-Under `Authentification Middleware`, select `HTPASSWD` , fefine a username and password for each user who will access the drive.
+Under `Authentification Middleware`, select `HTPASSWD` , define a username and password for each user who will access the drive. (see below)
 
 ![User credentials setup](docs/screenshots/user_credentials_setup_filestash.png)
 ---
@@ -408,7 +408,7 @@ cat terraform/shared.tfvars
 ```bash
 terraform -chdir=terraform/frontend output -raw ec2_role_arn
 ```
-In the box `Attribute Mapping`, enter the required S3 settings (access and secret key, AWS region, IAM role ARN).
+In the box `Attribute Mapping`, enter the required S3 settings : access and secret key, AWS region and IAM role ARN (see below).
 
 ![S3 bucket connection settings](docs/screenshots/S3_connection_configuration_filestash.png)
 ---
