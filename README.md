@@ -363,7 +363,7 @@ sudo docker compose -f /opt/stashcloud/docker-compose.yml up -d
 
 2. Set the Filestash admin password.
 
-> **Screenshot:** Filestash admin password setup
+![Filestash admin password setup](docs/screenshots/admin_password_filestash.png)
 
 If the admin password is already configured, open:
 `http://<EC2_PUBLIC_IP>/admin`
