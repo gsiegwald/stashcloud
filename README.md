@@ -1,4 +1,4 @@
-# Stashcloud – Lightweight Cloud Storage Manager
+# Stashcloud – Self-hosted shared drive 
 
 Stashcloud is a lightweight, self-hosted shared drive for teams, families, or groups of friends.
 
@@ -50,7 +50,9 @@ Using Filestash as the web interface and an S3 bucket as the file repository, th
 * Network access :
 
   * Outbound HTTPS access from your workstation to AWS APIs (Terraform + Ansible inventory)
-  * Ability to reach the EC2 instance over SSH (22) and HTTP (80) (HTTPS 443 will be added later)
+  * Ability to reach the EC2 instance over SSH (22), HTTP (80) and HTTPS (443)
+
+* A valid email address for Let's Encrypt certificate registration (to be set in `ansible/inventories/group_vars/frontend/main.yml` as `certbot_email`)
 
 ## Architecture 
 High-level view of the target architecture and the main network flows between the client, the Filestash VM, and the S3-compatible Object Storage bucket.
@@ -62,16 +64,24 @@ flowchart LR
     subgraph EC2["EC2 Ubuntu"]
       NGINX["Nginx reverse proxy (Docker)"]
       FS["Filestash (Docker)"]
+      CERTBOT["Certbot (Docker)"]
+      CERTBOT <-->|TLS certs via shared volume| NGINX
     end
     S3["Amazon S3 bucket"]
     CWL["CloudWatch Logs<br/>Log Group: /stashcloud/containers"]
   end
 
+  LE["Let's Encrypt"]
+
   %% Network flows
-  User["Client"] -->|SSH 22| EC2
-  User -->|HTTP 80 / HTTPS 443| NGINX
+  Admin["Admin"] -->|SSH 22| EC2
+  User["User"] -->|HTTPS 443| NGINX
+  User -.->|HTTP 80 redirect to HTTPS| NGINX
   NGINX -->|HTTP 8334| FS
   FS -->|S3 API| S3
+
+  %% TLS certificate flow
+  CERTBOT <-->|ACME challenge| LE
 
   %% Centralized logging flows
   NGINX -->|Logs over HTTPS - awslogs driver| CWL
@@ -88,8 +98,12 @@ flowchart LR
 
 The target architecture includes:
 
-* An Ubuntu Public Cloud instance (VM) to host Filestash and an Nginx server.
-* A Filestash Docker container (web application) accessible through Nginx (which will act as an HTTPS reverse proxy).
+The target architecture includes:
+
+* An Ubuntu EC2 instance to host Filestash, Nginx and Certbot.
+* A Filestash Docker container (web application) accessible through Nginx (HTTPS reverse proxy with TLS termination).
+* A Certbot Docker container that automatically obtains TLS certificates from Let's Encrypt using a sslip.io domain derived from the instance's public IP.
+* HTTPS access via a sslip.io domain (e.g. `52-47-80-15.sslip.io`), with HTTP requests on port 80 automatically redirected to HTTPS.
 * An Amazon S3 bucket to store uploaded files.
 * Centralized logging to Amazon CloudWatch Logs for both Nginx and Filestash (Docker `awslogs` log driver).
 

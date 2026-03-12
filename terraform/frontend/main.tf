@@ -53,14 +53,6 @@ resource "aws_security_group" "web_sg" {
   tags   = { Name = "stashcloud-web-sg" }
 
   ingress {
-    description = "HTTP Filestash (phase A)"
-    from_port   = 8080
-    to_port     = 8080
-    protocol    = "tcp"
-    cidr_blocks = [var.admin_ip]
-  }
-
-  ingress {
     description = "SSH from admin IP"
     from_port   = 22
     to_port     = 22
@@ -69,11 +61,11 @@ resource "aws_security_group" "web_sg" {
   }
 
   ingress {
-    description = "HTTP public"
+    description = "HTTP public  (ACME challenge + redirect)"
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = [var.admin_ip]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
@@ -81,7 +73,7 @@ resource "aws_security_group" "web_sg" {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = [var.admin_ip]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {

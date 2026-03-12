@@ -26,9 +26,11 @@ services:
       - stashnet
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
-
+      - certbot-etc:/etc/letsencrypt:ro
+      - certbot-webroot:/var/www/certbot:ro
     logging:
       driver: awslogs
       options:
@@ -37,9 +39,17 @@ services:
         awslogs-create-group: "true"
         awslogs-stream: nginx
 
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-webroot:/var/www/certbot
+
 networks:
   stashnet:
     driver: bridge
 
 volumes:
   filestash_data: {}
+  certbot-etc:
+  certbot-webroot:
