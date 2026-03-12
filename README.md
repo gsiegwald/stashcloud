@@ -110,52 +110,29 @@ The target architecture includes:
 ## Repository structure
 
 ```text
-
 stashcloud/
-├── .git/
-├── .gitignore                  # ignore state files, secrets, etc.
-├── README.md
-├── ansible.cfg                 # global Ansible configuration
-├── docker/
-│   ├── docker-compose.yml
-│   └── nginx.conf
-├── ansible/
-│   ├── inventories/
-│   │   └── aws_ec2.yaml        # dynamic inventory (AWS plugin)
-│   ├── group_vars/
-│   │   ├── backend/
-│   │   │   └── main.yml        # variables for backend hosts
-│   │   └── frontend/
-│   │       └── main.yml        # variables for frontend hosts
-│   ├── playbooks/
-│   │   ├── provision_back.yml  # provision S3
-│   │   ├── provision_front.yml # provision Filestash + Nginx
-│   │   └── site.yml
+├── ansible/                        # Configuration management (Ansible)
+│   ├── inventories/                # Dynamic inventory + group variables
+│   │   ├── group_vars/             # Variables scoped by host group
+│   │   │   ├── backend/
+│   │   │   └── frontend/           # Contains certbot_email for Let's Encrypt
+│   │   └── aws_ec2.yaml
+│   ├── playbooks/                  # Orchestration playbooks
 │   └── roles/
-│       ├── base/               # OS hardening + Docker install
-│       │   ├── files/
-│       │   ├── handlers/
-│       │   │   └── main.yml
-│       │   └── tasks/
-│       │       └── main.yml
-│       └── frontend/           # Filestash & Nginx deployment
-│           ├── files/
-│           ├── handlers/
-│           └── tasks/
-│               └── main.yml
-└── terraform/
-    ├── backend/                # S3 bucket + IAM policy
-    │   ├── s3.tf
-    │   ├── iam.tf
-    │   └── variables.tf
-    ├── frontend/               # VPC + EC2 + IAM role/profile + CloudWatch logs
-    │   ├── main.tf
-    │   ├── iam.tf
-    │   ├── logs.tf
-    │   ├── remote_state.tf     # read backend outputs (bucket ARN, policy ARN)
-    │   ├── variable.tf
-    │   └── local.tfvars.example# local admin IP 
-    └── shared.tfvars.example   # shared variables across Terraform stacks
+│       ├── base/                   # OS hardening, Docker + AWS CLI install
+│       └── frontend/               # Filestash, Nginx, Certbot deployment
+│           └── templates/          # Jinja2 templates for Nginx config (HTTP-only + HTTPS)
+├── docker/                         # Docker Compose stack definition
+├── docs/
+│   └── screenshots/                # Filestash setup screenshots for README
+├── scripts/                        # Helper scripts (e.g. start-infra.sh)
+├── terraform/
+│   ├── backend/                    # S3 bucket + IAM policy
+│   ├── frontend/                   # VPC, EC2, Security Group, IAM role, CloudWatch Logs
+│   │   └── local.tfvars.example    # Template for local variables (e.g. admin IP)
+│   └── shared.tfvars.example       # Template for shared Terraform variables
+├── ansible.cfg                     # Global Ansible configuration
+└── README.md
 ```
 Note: 
 * terraform/*/terraform.tfstate* and terraform/*/.terraform/ exist locally but are intentionally ignored by Git for security concerns.
@@ -237,54 +214,58 @@ flowchart TB
     U["Admin workstation"]
     ANS["Ansible local"]
     DC["docker/docker-compose.yml"]
-    NC["docker/Nginx.conf"]
+    TMPL["ansible/roles/frontend/templates/<br/>nginx.conf.j2<br/>nginx-http-only.conf.j2"]
   end
 
   subgraph FR["AWS Resources : Frontend"]
     direction TB
-
-    EC2["EC2 instance stashcloud_ec2\nUbuntu"]
+    EC2["EC2 instance stashcloud_ec2<br/>Ubuntu"]
   end
 
-  subgraph APP["Service  "]
+  subgraph APP["Service"]
     OS["OS updates"]
     DOCKER["Docker Engine + Compose v2"]
     ST["stashnet (Docker network)"]
     NGX["Nginx container"]
     FLS["Filestash container"]
-    EP["Service endpoints <br>HTTP and HTTPS"]
-    OPT["/opt/stashcloud/docker-compose.yml
-    /opt/stashcloud/Nginx.conf"]
+    CERTBOT["Certbot container"]
+    EP["Service endpoint<br/>HTTPS 443"]
+    OPT["/opt/stashcloud/docker-compose.yml<br/>/opt/stashcloud/nginx.conf"]
+  end
+
+  subgraph EXT["External Services"]
+    LE["Let's Encrypt"]
   end
 
   U --> ANS
-
   ANS -- "query IP" <--> FR
-
-
   ANS -- "SSH with key" --> EC2
-
-  ANS -- "copy compose + Nginx.conf" --> OPT
+  ANS -- "copy compose + templates" --> OPT
   DC --> ANS
-  NC --> ANS
+  TMPL --> ANS
 
   EC2 --> OS --> DOCKER --> ST
   ST --> NGX --> EP
   ST --> FLS
-  B["User / Browser"] -- HTTP or HTTPS --> EP
+  ST --> CERTBOT
+
+  CERTBOT <-->|ACME challenge| LE
+  CERTBOT <-->|TLS certs via shared volume| NGX
+
+  B["User"] -- HTTPS --> EP
   DOCKER -. "docker compose reads config" .-> OPT
 
-%% ---- Subgraph styling (backgrounds) ----
-style L  fill:#F3F4F6,stroke:#949494,stroke-width:1px,color:#111827,font-size:15px,font-weight:bold
-style FR fill:#F3F4F6,stroke:#949494,stroke-width:1px,color:#111827,font-size:15px,font-weight:bold
-style APP fill:#F3F4F6,stroke:#949494,stroke-width:1px,color:#111827,font-size:15px,font-weight:bold
-%% ---- Node styling ----
-classDef fileNode fill:#F3E8FF,stroke:#7C3AED,stroke-width:1px,color:#111827;
-classDef default  fill:#E8F1FF,stroke:#2563EB,stroke-width:1px,color:#111827;
-classDef anchorNode fill:transparent,stroke:transparent,stroke-width:0px,color:transparent;
+  style L  fill:#F3F4F6,stroke:#949494,stroke-width:1px,color:#111827,font-size:15px,font-weight:bold
+  style FR fill:#F3F4F6,stroke:#949494,stroke-width:1px,color:#111827,font-size:15px,font-weight:bold
+  style APP fill:#F3F4F6,stroke:#949494,stroke-width:1px,color:#111827,font-size:15px,font-weight:bold
+  style EXT fill:#F3F4F6,stroke:#949494,stroke-width:1px,color:#111827,font-size:15px,font-weight:bold
 
-%% Apply file style to file nodes
-class DC,NC,OPT fileNode;
+  classDef fileNode fill:#F3E8FF,stroke:#7C3AED,stroke-width:1px,color:#111827;
+  classDef default  fill:#E8F1FF,stroke:#2563EB,stroke-width:1px,color:#111827;
+  classDef anchorNode fill:transparent,stroke:transparent,stroke-width:0px,color:transparent;
+
+  class DC,TMPL,OPT fileNode;
+
 ```
 
 ### Runbook :
@@ -319,8 +300,10 @@ This playbook:
 
 * updates the OS packages,
 * installs Docker Engine and the Docker Compose v2 plugin,
-* copies `docker/docker-compose.yml` and `docker/nginx.conf` to `/opt/stashcloud/`,
-* deploys (or redeploys) the Filestash + Nginx stack using `docker compose`.
+* copies `docker/docker-compose.yml` to `/opt/stashcloud/`,
+* deploys Nginx with an HTTP-only config (for the ACME challenge),
+* obtains a TLS certificate from Let's Encrypt via Certbot,
+* switches Nginx to the full HTTPS config and reloads it.
 
 ```bash
 ansible-playbook -i ansible/inventories/aws_ec2.yaml ansible/playbooks/provision_front.yml
@@ -339,9 +322,14 @@ terraform -chdir=terraform/backend destroy -var-file=../shared.tfvars
 
 #### 1) From your local machine
 
-Test access to the remote instance via http :
+Test access to the remote instance via https :
 ```bash
-curl -v http://$(terraform -chdir=terraform output -raw ec2_public_ip)/
+# Build the sslip.io FQDN from the EC2 public IP
+EC2_IP=$(terraform -chdir=terraform/frontend output -raw ec2_public_ip)
+FQDN=$(echo $EC2_IP | tr '.' '-').sslip.io
+
+# Test HTTPS access
+curl -v https://$FQDN/
 ```
 
 Connect using your private key and the instance public IP obtained from Terraform :
@@ -373,14 +361,14 @@ sudo docker compose -f /opt/stashcloud/docker-compose.yml up -d
 ### 1) Open the Filestash admin console
 
 1. In a web browser, open:
-   `http://<EC2_PUBLIC_IP>/admin/setup`
+   `https://<EC2_IP_WITH_DASHES>.sslip.io/admin/setup`
 
 2. Set the Filestash admin password (see below)
 
 ![Filestash admin password setup](docs/screenshots/admin_password_filestash.png)
 
 If the admin password is already configured, open:
-`http://<EC2_PUBLIC_IP>/admin`
+`https://<EC2_IP_WITH_DASHES>.sslip.io/admin`
 and sign in with the admin password.
 
 ---
@@ -430,12 +418,12 @@ In the box `Attribute Mapping`, enter the required S3 settings : access and secr
 ### 5) Sign in as a user
 
 1. Go back to the Filestash login page:
-   `http://<EC2_PUBLIC_IP>/`
+   `https://<EC2_IP_WITH_DASHES>.sslip.io/`
 2. Sign in using one of the user accounts created earlier to access the file manager interface.
 
 ## Security
 
-### Measures already in place
+* **HTTPS with valid TLS certificate**: all web traffic is served over HTTPS using a certificate automatically obtained from Let's Encrypt via Certbot. HTTP requests on port 80 are redirected to HTTPS. The certificate is tied to a sslip.io domain derived from the instance's public IP.
 
 * **SSH restricted to `admin_ip` via the Security Group** (port 22 allowed only from your /32).
 * **No password authentication**: the Ubuntu image uses key-based SSH only by default.
@@ -447,8 +435,3 @@ In the box `Attribute Mapping`, enter the required S3 settings : access and secr
   * **CloudWatch Logs policy** (created by the *frontend* stack) grants only the required permissions to publish container logs to CloudWatch Logs.
 * **Centralized logging to CloudWatch Logs**: Nginx and Filestash containers use the Docker `awslogs` driver to ship logs over HTTPS to the log group `/stashcloud/containers` (log group managed by Terraform).
 
-## Current project status
-
-* A t3.micro instance on Amazon Web Services (region eu-west-3, Paris) is up and running with Ubuntu 24.04 LTS.
-* The VM resides in a dedicated VPC public subnet and is reachable via its public IPv4; SSH access is restricted to your `admin_ip` by the security-group rule.
-* This instance will host the Filestash application later, to be deployed with Docker/Ansible.
