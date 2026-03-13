@@ -27,3 +27,6 @@ __pycache__/
 # Common system files
 .DS_Store
 Thumbs.db
+
+#certbot email
+/ansible/inventories/group_vars/frontend/main.yml

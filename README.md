@@ -135,7 +135,7 @@ stashcloud/
 │   │   └── aws_ec2.yaml
 │   ├── playbooks/                  # Orchestration playbooks
 │   └── roles/
-│       ├── base/                   # OS hardening, Docker + AWS CLI install
+│       ├── base/                   # OS update/update, Docker + AWS CLI install
 │       └── frontend/               # Filestash, Nginx, Certbot deployment
 │           └── templates/          # Jinja2 templates for Nginx config (HTTP-only + HTTPS)
 ├── docker/                         # Docker Compose stack definition
