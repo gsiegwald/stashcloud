@@ -17,7 +17,7 @@ Using Filestash as the web interface and an S3 bucket as the file repository, th
 > - Configuration files set up from the provided templates:
 >   - `terraform/shared.tfvars` (copy from `shared.tfvars.example`) — AWS region, project name, SSH public key
 >   - `terraform/frontend/local.tfvars` (copy from `local.tfvars.example`) — your public IP for SSH access
->   - `ansible/inventories/group_vars/frontend/main.yml` — set `certbot_email` to a valid email for Let's Encrypt
+>   - `ansible/inventories/group_vars/frontend/main.yml` (copy from `main.yml.example`) — set `certbot_email` to a valid email for Let's Encrypt
 >
 > See [Prerequisites](#prerequisites) for full details.
 ```bash
