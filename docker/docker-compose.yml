@@ -13,7 +13,6 @@ services:
       options:
         awslogs-group: /stashcloud/containers
         awslogs-region: ${AWS_REGION:-eu-west-3}
-        awslogs-create-group: "true"
         awslogs-stream: filestash
 
   nginx:
@@ -36,7 +35,6 @@ services:
       options:
         awslogs-group: /stashcloud/containers
         awslogs-region: ${AWS_REGION:-eu-west-3}
-        awslogs-create-group: "true"
         awslogs-stream: nginx
 
   certbot:

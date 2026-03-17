@@ -1,15 +1,32 @@
 ---
-# Install AWS CLI v2 
-- name: Install curl and unzip
+# Install AWS CLI v2 with GPG signature verification.
+# Public key retrieved from the AWS CLI installation guide (https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) and stored in
+# ansible/roles/base/files/aws-cli-public-key.pgp
+# Note: key expires 2026-07-07, update aws-cli-public-key.pgp accordingly.
+
+- name: Install prerequisites
   apt:
     name:
       - curl
       - unzip
+      - gpg
     state: present
     update_cache: yes
   become: true
 
-- name: Download zip for AWS CLI v2
+- name: Copy AWS GPG public key from repo to remote
+  ansible.builtin.copy:
+    src: aws-cli-public-key.pgp
+    dest: /tmp/aws-cli-public-key.pgp
+    mode: '0644'
+
+- name: Import AWS GPG public key into keyring
+  ansible.builtin.command:
+    cmd: gpg --import /tmp/aws-cli-public-key.pgp
+  changed_when: false
+  become: true
+
+- name: Download AWS CLI zip
   get_url:
     url: https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip
     dest: /tmp/awscliv2.zip
@@ -17,7 +34,21 @@
     force: no
   become: true
 
-- name: Unzip zip file
+- name: Download AWS CLI signature
+  get_url:
+    url: https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip.sig
+    dest: /tmp/awscliv2.zip.sig
+    mode: '0644'
+    force: yes
+  become: true
+
+- name: Verify GPG signature
+  ansible.builtin.command:
+    cmd: gpg --verify /tmp/awscliv2.zip.sig /tmp/awscliv2.zip
+  changed_when: false
+  become: true
+
+- name: Unzip AWS CLI
   unarchive:
     src: /tmp/awscliv2.zip
     dest: /tmp/
@@ -25,14 +56,19 @@
     creates: /tmp/aws
   become: true
 
-- name: Launch AWS CLI v2 install
+- name: Install AWS CLI v2
   command: /tmp/aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
   args:
     creates: /usr/local/bin/aws
   become: true
 
-- name: Remove awscliv2.zip
+- name: Remove temporary files
   file:
-    path: /tmp/awscliv2.zip
+    path: "{{ item }}"
     state: absent
+  loop:
+    - /tmp/awscliv2.zip
+    - /tmp/awscliv2.zip.sig
+    - /tmp/aws-cli-public-key.pgp
+    - /tmp/aws
   become: true
