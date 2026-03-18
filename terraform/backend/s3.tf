@@ -4,6 +4,7 @@ provider "aws" {
 
 resource "aws_s3_bucket" "stashcloud" {
   bucket = var.bucket_name
+  force_destroy = true
 
   tags = {
     Name        = "stashcloud-bucket"
