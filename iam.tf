@@ -23,3 +23,6 @@ resource "aws_iam_policy" "s3_policy" {
   policy      = data.aws_iam_policy_document.s3_access.json
 }
 
+output "s3_policy_arn" {
+  value = aws_iam_policy.s3_policy.arn
+}

@@ -1,5 +1,5 @@
 output "ec2_public_ip" {
-  description = "EC2 public IP adress"
+  description = "EC2 public IP address"
   value       = aws_eip.stashcloud_eip.public_ip
 }
 

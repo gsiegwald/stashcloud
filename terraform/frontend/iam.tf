@@ -20,9 +20,7 @@ resource "aws_iam_instance_profile" "filestash_profile" {
   role = aws_iam_role.filestash_role.name
 }
 
-####################################
 # Policy CloudWatch Logs
-####################################
 data "aws_iam_policy_document" "logs_policy_doc" {
   statement {
     sid    = "ContainerWriteLogs"
@@ -33,8 +31,7 @@ data "aws_iam_policy_document" "logs_policy_doc" {
       "logs:PutLogEvents",
       "logs:DescribeLogStreams"
     ]
-
-    resources = ["arn:aws:logs:*:*:*"]
+    resources = ["${aws_cloudwatch_log_group.stashcloud.arn}:*"]  
   }
 }
 

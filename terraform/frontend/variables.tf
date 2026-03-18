@@ -4,6 +4,6 @@ variable "aws_region" {
 }
 
 variable "admin_ip" {
-  description = "Allowed IP adress for SSH (/32)"
+  description = "Allowed IP address for SSH (/32)"
   type        = string
 }
