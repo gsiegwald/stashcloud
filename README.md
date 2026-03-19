@@ -22,8 +22,6 @@ The script will prompt for:
 - AWS region (default: `eu-west-3`)
 - A valid email address for Let's Encrypt
 
----
-
 ### Post-deployment setup
 
 #### 1) Set the admin password
@@ -47,8 +45,6 @@ In the admin console, go to **Storage** and select **S3** as the backend. You wi
 #### 3) Create users
 
 In the admin console, go to **Authentication**, select **HTPASSWD** and define a username and password for each user.
-
----
 
 ### Destroy the infrastructure
 ```bash
