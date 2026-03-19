@@ -8,7 +8,7 @@ Using Filestash as the web interface and an S3 bucket as the file repository, th
 
 ## TL;DR
 
-
+### Deploy the infrastructure
 > **Requires:**
 > - Docker, Git and AWS CLI installed on your machine
 > - AWS credentials configured (`aws configure`)
@@ -22,7 +22,35 @@ The script will prompt for:
 - AWS region (default: `eu-west-3`)
 - A valid email address for Let's Encrypt
 
-To destroy the infrastructure:
+---
+
+### Post-deployment setup
+
+#### 1) Set the admin password
+
+Open `https://<EC2_IP_WITH_DASHES>.sslip.io/admin/setup` and set the Filestash admin password.
+
+#### 2) Connect the S3 bucket
+
+In the admin console, go to **Storage** and select **S3** as the backend. You will need:
+
+- **AWS region** — the region you entered at deployment
+- **Bucket name** — stored in `.stashcloud-state`
+```bash
+  grep bucket_name .stashcloud-state
+```
+- **IAM role ARN** — retrieve with:
+```bash
+  terraform -chdir=terraform/frontend output -raw ec2_role_arn
+```
+
+#### 3) Create users
+
+In the admin console, go to **Authentication**, select **HTPASSWD** and define a username and password for each user.
+
+---
+
+### Destroy the infrastructure
 ```bash
 ./destroy.sh
 ```
