@@ -1,11 +1,12 @@
-# Stashcloud – Self-hosted shared drive 
+# Stashcloud – Self-managed multi-user shared drive
 
-Stashcloud is a lightweight, self-hosted shared drive for teams, families, or groups of friends.
+> Fully provisioned end-to-end with Terraform & Ansible.
+> Enforced HTTPS, Least-privilege access and centralized logging. 
 
-It lets you manage files from a web browser without relying on Google Drive/Dropbox-like services or sharing storage access credentials with end users.
+Stashcloud is a secure infrastructure for Filestash  — a lightweight web-based file manager —  with S3-compatible object storage as the backend.
 
-Using Filestash as the web interface and an S3 bucket as the file repository, the stack is provisioned end-to-end securely with Terraform + Ansible.
-
+It provides a shared drive accessible from a web browser, without relying on services like 
+Google Drive or Dropbox, and without exposing storage credentials to end users.
 ## TL;DR
 
 ### Infrastructure provisionning 
@@ -378,61 +379,6 @@ Or using the provided script:
 > they will continue to incur AWS charges and must be deleted manually from
 > the AWS console.
 
-
-
-
-
-
-### Runbook :
-
-> **Note**: run the following commands from the repository root (`~/stashcloud`).
-
-#### 1) Provision backend infrastructure (Terraform)
-
-```bash
-terraform -chdir=terraform/backend init -var-file=../shared.tfvars 
-terraform -chdir=terraform/backend plan -var-file=../shared.tfvars 
-terraform -chdir=terraform/backend apply -var-file=../shared.tfvars 
-```
-
-#### 2) Provision frontend infrastructure (Terraform)
-
-```bash
-terraform -chdir=terraform/frontend init  -var-file=../shared.tfvars
-terraform -chdir=terraform/frontend plan  -var-file=../shared.tfvars
-terraform -chdir=terraform/frontend apply  -var-file=../shared.tfvars
-```
-
-Get EC2 public IP :
-
-```bash
-terraform -chdir=terraform/frontend output -raw ec2_public_ip
-```
-
-#### 3) Configure the instance and deploy the frontend stack (Ansible)
-
-This playbook:
-
-* updates the OS packages,
-* installs Docker Engine and the Docker Compose v2 plugin,
-* copies `docker/docker-compose.yml` to `/opt/stashcloud/`,
-* deploys Nginx with an HTTP-only config (for the ACME challenge),
-* obtains a TLS certificate from Let's Encrypt via Certbot,
-* switches Nginx to the full HTTPS config and reloads it.
-
-```bash
-ansible-playbook -i ansible/inventories/aws_ec2.yaml ansible/playbooks/provision_front.yml
-```
-
-#### 4) If needed : Delete the frontend and backend infrastructures
-
-```bash
-terraform -chdir=terraform/frontend destroy -var-file=../shared.tfvars -var-file=local.tfvars
-
-terraform -chdir=terraform/backend destroy -var-file=../shared.tfvars
-```
-
-
 ### Validate the deployment :
 
 #### 1) From your local machine
@@ -447,7 +393,7 @@ FQDN=$(echo $EC2_IP | tr '.' '-').sslip.io
 curl -v https://$FQDN/
 ```
 
-Connect using your private key and the instance public IP obtained from Terraform :
+Connect using your SSH private key and the instance public IP obtained from Terraform :
 
 ```bash
 ssh -i ~/.ssh/id_ed25519 ubuntu@$(terraform -chdir=terraform/frontend output -raw ec2_public_ip)
