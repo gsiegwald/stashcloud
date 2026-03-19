@@ -30,7 +30,7 @@ Open `https://<EC2_IP_WITH_DASHES>.sslip.io/admin/setup` and set the Filestash a
 
 #### 2) Create users and connect the S3 bucket
 
-In the admin console, go to **Storage** and select **S3** as the backend. 
+In the admin console, go to "Storage" and select "S3" as the backend. 
 
 Under "Authentication Middleware" select "HTPASSWD" and create one ore more users.
 
@@ -38,9 +38,9 @@ Under "Attribute Mapping", select S3 and fill the minmimum required fields.
 
 You will need:
 
-- **AWS credentials** — Your AWS Access Key ID and Secret Access Key
-- **AWS region** — the region you entered at deployment
-- **IAM role ARN** — retrieve with:
+- AWS credentials — Your AWS Access Key ID and Secret Access Key
+- AWS region — the region you entered at deployment
+- IAM role ARN — retrieve with:
 ```bash
   terraform -chdir=terraform/frontend output -raw ec2_role_arn
 ```
@@ -51,7 +51,7 @@ You will need:
 ```
 ## Prerequisites
 
-* Local workstation (Linux) with the following tools installed:
+* Local workstation with the following tools installed:
 
   * Terraform (tested: 1.14.3)
   * Ansible (tested: 2.10.8)
@@ -59,41 +59,32 @@ You will need:
   * Git
   * Python 3 + pip (recommended to use a virtualenv)
 
-* Python dependencies on the control node (your local machine), required for the AWS dynamic inventory:
-
-  * `boto3`
-  * `botocore`
-  * `jmespath`
-
-* Ansible collections :
-
-  * `amazon.aws` (AWS EC2 dynamic inventory plugin)
-  * `community.docker` (Docker Compose v2 module)
-
-  Example :
-
-  ```bash
+* Python dependencies:
+```bash
   python3 -m venv .venv
   source .venv/bin/activate
   pip install -U pip
   pip install boto3 botocore jmespath
+```
+
+* Ansible collections :
+
+```bash
   ansible-galaxy collection install amazon.aws community.docker
-  ```
+```
 
  * An AWS account with programmatic access enabled via an Access Key ID / Secret Access Key configured on your workstation (`aws configure`)
 
 * The AWS credentials used on the workstation must allow managing VPC/EC2/EIP, S3, IAM (roles/policies/instance profiles) and CloudWatch Logs
 
-* No AWS static keys are required on the EC2 instance: access to S3 and CloudWatch Logs is provided via the EC2 instance profile (IAM role) and IMDSv2.
-
-*  A local SSH key (private key stored on your workstation, e.g. `~/.ssh/id_ed25519`)
+* A local SSH key (private key stored on your workstation, e.g. `~/.ssh/id_ed25519`)
 
 * Network access :
 
   * Outbound HTTPS access from your workstation to AWS APIs (Terraform + Ansible inventory)
   * Ability to reach the EC2 instance over SSH (22), HTTP (80) and HTTPS (443)
 
-* A valid email address for Let's Encrypt certificate registration (to be set in `ansible/inventories/group_vars/frontend/main.yml` as `certbot_email`)
+* A valid email address for Let's Encrypt certificate registration
 
 ## Architecture 
 High-level view of the target architecture and the main network flows between the client, the Filestash VM, and the S3-compatible Object Storage bucket.
@@ -308,6 +299,89 @@ flowchart TB
   class DC,TMPL,OPT fileNode;
 
 ```
+
+### Automated deployment
+```bash
+./run.sh
+```
+
+The script handles everything interactively:
+1. Prompts for AWS region and Let's Encrypt email
+2. Generates a unique S3 bucket name and persists it in `.stashcloud-state`
+3. Detects your public IP automatically for SSH access
+4. Runs Terraform and Ansible end-to-end
+
+---
+
+### Manual deployment
+
+If you prefer to run each step manually, set the required environment variables first:
+```bash
+# Required variables
+export TF_VAR_aws_region="eu-west-3"
+export AWS_DEFAULT_REGION="eu-west-3"
+export TF_VAR_bucket_name="stashcloud-a3f7c2b1"    # choose a globally unique name
+export TF_VAR_admin_ip="$(curl -s https://ifconfig.me)/32"
+export CERTBOT_EMAIL="your@email.com"
+```
+
+#### 1) Provision backend infrastructure (Terraform)
+```bash
+terraform -chdir=terraform/backend init
+terraform -chdir=terraform/backend plan
+terraform -chdir=terraform/backend apply
+```
+
+#### 2) Provision frontend infrastructure (Terraform)
+```bash
+terraform -chdir=terraform/frontend init
+terraform -chdir=terraform/frontend plan
+terraform -chdir=terraform/frontend apply
+```
+
+Get EC2 public IP:
+```bash
+terraform -chdir=terraform/frontend output -raw ec2_public_ip
+```
+
+#### 3) Configure the instance and deploy the stack (Ansible)
+```bash
+ansible-playbook \
+  -i ansible/inventories/aws_ec2.yaml \
+  ansible/playbooks/provision_front.yml \
+  --extra-vars "certbot_email=${CERTBOT_EMAIL}"
+```
+
+---
+
+### Infrastructure destruction
+
+Set the environment variables as above, then:
+```bash
+# Destroy frontend only
+terraform -chdir=terraform/frontend destroy
+
+# Destroy backend only
+terraform -chdir=terraform/backend destroy
+```
+
+Or using the provided script:
+```bash
+./destroy.sh           # destroy everything
+./destroy.sh frontend  # destroy frontend only
+./destroy.sh backend   # destroy backend only
+```
+
+> **Warning**: always destroy the infrastructure before deleting the repository
+> or the `.stashcloud-state` file. Terraform needs its state to know what
+> resources to delete. If the state is lost while resources are still running,
+> they will continue to incur AWS charges and must be deleted manually from
+> the AWS console.
+
+
+
+
+
 
 ### Runbook :
 
