@@ -8,22 +8,24 @@ Using Filestash as the web interface and an S3 bucket as the file repository, th
 
 ## TL;DR
 
+
 > **Requires:**
-> - Terraform, Ansible, AWS CLI and Git installed on your local machine
-> - Python virtualenv with `boto3`, `botocore` and `jmespath`
-> - Ansible collections: `amazon.aws` and `community.docker`
+> - Docker, Git and AWS CLI installed on your machine
 > - AWS credentials configured (`aws configure`)
-> - SSH key available (e.g. `~/.ssh/id_ed25519`)
-> - Configuration files set up from the provided templates:
->   - `terraform/shared.tfvars` (copy from `shared.tfvars.example`) — AWS region, project name, SSH public key
->   - `terraform/frontend/local.tfvars` (copy from `local.tfvars.example`) — your public IP for SSH access
->   - `ansible/inventories/group_vars/frontend/main.yml` (copy from `main.yml.example`) — set `certbot_email` to a valid email for Let's Encrypt
->
-> See [Prerequisites](#prerequisites) for full details.
 ```bash
-./scripts/start-infra.sh
+git clone https://github.com/gsiegwald/stashcloud.git
+cd stashcloud
+./run.sh
 ```
 
+The script will prompt for:
+- AWS region (default: `eu-west-3`)
+- A valid email address for Let's Encrypt
+
+To destroy the infrastructure:
+```bash
+./destroy.sh
+```
 ## Prerequisites
 
 * Local workstation (Linux) with the following tools installed:
@@ -299,9 +301,9 @@ terraform -chdir=terraform/backend apply -var-file=../shared.tfvars
 #### 2) Provision frontend infrastructure (Terraform)
 
 ```bash
-terraform -chdir=terraform/frontend init  -var-file=../shared.tfvars -var-file=local.tfvars
-terraform -chdir=terraform/frontend plan  -var-file=../shared.tfvars -var-file=local.tfvars
-terraform -chdir=terraform/frontend apply  -var-file=../shared.tfvars -var-file=local.tfvars
+terraform -chdir=terraform/frontend init  -var-file=../shared.tfvars
+terraform -chdir=terraform/frontend plan  -var-file=../shared.tfvars
+terraform -chdir=terraform/frontend apply  -var-file=../shared.tfvars
 ```
 
 Get EC2 public IP :

@@ -28,5 +28,8 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
-#certbot email
+# Certbot email
 /ansible/inventories/group_vars/frontend/main.yml
+
+# Local deployment state
+.stashcloud-state
