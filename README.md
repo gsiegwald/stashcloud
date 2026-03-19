@@ -8,7 +8,7 @@ Using Filestash as the web interface and an S3 bucket as the file repository, th
 
 ## TL;DR
 
-### Deploy the infrastructure
+### Infrastructure provisionning 
 > **Requires:**
 > - Docker, Git and AWS CLI installed on your machine
 > - AWS credentials configured (`aws configure`)
@@ -28,23 +28,22 @@ The script will prompt for:
 
 Open `https://<EC2_IP_WITH_DASHES>.sslip.io/admin/setup` and set the Filestash admin password.
 
-#### 2) Connect the S3 bucket
+#### 2) Create users and connect the S3 bucket
 
-In the admin console, go to **Storage** and select **S3** as the backend. You will need:
+In the admin console, go to **Storage** and select **S3** as the backend. 
 
+Under "Authentication Middleware" select "HTPASSWD" and create one ore more users.
+
+Under "Attribute Mapping", select S3 and fill the minmimum required fields.
+
+You will need:
+
+- **AWS credentials** — Your AWS Access Key ID and Secret Access Key
 - **AWS region** — the region you entered at deployment
-- **Bucket name** — stored in `.stashcloud-state`
-```bash
-  grep bucket_name .stashcloud-state
-```
 - **IAM role ARN** — retrieve with:
 ```bash
   terraform -chdir=terraform/frontend output -raw ec2_role_arn
 ```
-
-#### 3) Create users
-
-In the admin console, go to **Authentication**, select **HTPASSWD** and define a username and password for each user.
 
 ### Destroy the infrastructure
 ```bash
