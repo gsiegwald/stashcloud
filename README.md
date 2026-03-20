@@ -1,12 +1,13 @@
-# Stashcloud – Self-managed multi-user shared drive
+# Stashcloud – Self-managed shared drive
 
-> Fully provisioned end-to-end with Terraform & Ansible.
-> Enforced HTTPS, Least-privilege access and centralized logging. 
+- Fully provisioned end-to-end with Terraform & Ansible.
+- Enforced HTTPS, Least-privilege access and centralized logging. 
 
-Stashcloud is a secure infrastructure for Filestash  — a lightweight web-based file manager —  with S3-compatible object storage as the backend.
+Stashcloud is a secure, ready-to-deploy infrastructure for [Filestash](https://github.com/mickael-kerjean/filestash) — a web-based file manager — with S3-compatible object storage as the backend.
 
 It provides a shared drive accessible from a web browser, without relying on services like 
 Google Drive or Dropbox, and without exposing storage credentials to end users.
+
 ## TL;DR
 
 ### Infrastructure provisionning 
