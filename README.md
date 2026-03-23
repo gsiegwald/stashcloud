@@ -79,8 +79,6 @@ You will need:
 
 * The AWS credentials used on the workstation must allow managing VPC/EC2/EIP, S3, IAM (roles/policies/instance profiles) and CloudWatch Logs
 
-* A local SSH key (private key stored on your workstation, e.g. `~/.ssh/id_ed25519`)
-
 * Network access :
 
   * Outbound HTTPS access from your workstation to AWS APIs (Terraform + Ansible inventory)
@@ -132,8 +130,6 @@ flowchart LR
 
 The target architecture includes:
 
-The target architecture includes:
-
 * An Ubuntu EC2 instance to host Filestash, Nginx and Certbot.
 * A Filestash Docker container (web application) accessible through Nginx (HTTPS reverse proxy with TLS termination).
 * A Certbot Docker container that automatically obtains TLS certificates from Let's Encrypt using a sslip.io domain derived from the instance's public IP.
@@ -149,7 +145,7 @@ stashcloud/
 │   ├── inventories/                # Dynamic inventory + group variables
 │   │   ├── group_vars/             # Variables scoped by host group
 │   │   │   ├── backend/
-│   │   │   └── frontend/           # Contains certbot_email for Let's Encrypt
+│   │   │   └── frontend/
 │   │   └── aws_ec2.yaml
 │   ├── playbooks/                  # Orchestration playbooks
 │   └── roles/
@@ -159,19 +155,20 @@ stashcloud/
 ├── docker/                         # Docker Compose stack definition
 ├── docs/
 │   └── screenshots/                # Filestash setup screenshots for README
-├── scripts/                        # Helper scripts (e.g. start-infra.sh)
+├── scripts/                        # Deployment and destruction helper script                  
 ├── terraform/
 │   ├── backend/                    # S3 bucket + IAM policy
-│   ├── frontend/                   # VPC, EC2, Security Group, IAM role, CloudWatch Logs
-│   │   └── local.tfvars.example    # Template for local variables (e.g. admin IP)
-│   └── shared.tfvars.example       # Template for shared Terraform variables
+│   └── frontend/                   # VPC, EC2, Security Group, IAM role, CloudWatch Logs
 ├── ansible.cfg                     # Global Ansible configuration
+├── run.sh                          # Main deployment entry point
 └── README.md
 ```
-Note: 
-* terraform/*/terraform.tfstate* and terraform/*/.terraform/ exist locally but are intentionally ignored by Git for security concerns.
 
-* terraform/shared.tfvars and terraform/frontend/local.tfvars are intentionally kept local-only for security concerns. The repository includes *.tfvars.example files (terraform/shared.tfvars.example, terraform/frontend/local.tfvars.example) as templates to document the required variables.
+Note: The following files and directories are local-only and intentionally ignored by Git:
+
+* `terraform/*/terraform.tfstate*` and `terraform/*/.terraform/` — Terraform state and provider cache.
+* `.stashcloud-state` — stores the generated S3 bucket name and AWS region across deployments.
+* `.ssh/` — auto-generated SSH key pair used for deployment.
 
 
 ## Provisionning
@@ -307,11 +304,11 @@ flowchart TB
 ./run.sh
 ```
 
-The script handles everything interactively:
-1. Prompts for AWS region and Let's Encrypt email
-2. Generates a unique S3 bucket name and persists it in `.stashcloud-state`
-3. Detects your public IP automatically for SSH access
-4. Runs Terraform and Ansible end-to-end
+The script asks for AWS region and email used for Let's Encrypt, and then everything else is handled automatically :
+- Generates a unique S3 bucket name and persists it in `.stashcloud-state`
+- Detects your public IP automatically for SSH access
+- SSH key pair is generated in `.ssh/` and reused across deployments
+- Runs Terraform and Ansible end-to-end
 
 ---
 
@@ -325,6 +322,13 @@ export AWS_DEFAULT_REGION="eu-west-3"
 export TF_VAR_bucket_name="stashcloud-a3f7c2b1"    # choose a globally unique name
 export TF_VAR_admin_ip="$(curl -s https://ifconfig.me)/32"
 export CERTBOT_EMAIL="your@email.com"
+
+# SSH key — generate a dedicated key pair if you don't have one
+ssh-keygen -t ed25519 -f .ssh/stashcloud_key -N "" -C "stashcloud-deployer"
+export TF_VAR_ssh_public_key=$(cat .ssh/stashcloud_key.pub)
+export ANSIBLE_PRIVATE_KEY_FILE=".ssh/stashcloud_key"
+export ANSIBLE_SSH_ARGS="-o UserKnownHostsFile=.ssh/known_hosts"
+
 ```
 
 #### 1) Provision backend infrastructure (Terraform)
@@ -348,6 +352,10 @@ terraform -chdir=terraform/frontend output -raw ec2_public_ip
 
 #### 3) Configure the instance and deploy the stack (Ansible)
 ```bash
+# Trust the EC2 host key on first connection
+PUBLIC_IP=$(terraform -chdir=terraform/frontend output -raw ec2_public_ip)
+ssh-keyscan -H "$PUBLIC_IP" >> .ssh/known_hosts
+
 ansible-playbook \
   -i ansible/inventories/aws_ec2.yaml \
   ansible/playbooks/provision_front.yml \
@@ -397,7 +405,7 @@ curl -v https://$FQDN/
 Connect using your SSH private key and the instance public IP obtained from Terraform :
 
 ```bash
-ssh -i ~/.ssh/id_ed25519 ubuntu@$(terraform -chdir=terraform/frontend output -raw ec2_public_ip)
+ssh -i .ssh/stashcloud_key ubuntu@$(terraform -chdir=terraform/frontend output -raw ec2_public_ip)
 ```
 
 #### 2) From the EC2 instance
@@ -474,7 +482,7 @@ cat ~/.aws/credentials
 **Get the AWS region**
 
 ```bash
-cat terraform/shared.tfvars
+grep aws_region .stashcloud-state
 ```
 
 **Get the EC2 IAM role ARN:**
