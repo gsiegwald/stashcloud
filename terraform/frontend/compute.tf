@@ -1,6 +1,6 @@
 resource "aws_key_pair" "admin_key" {
   key_name   = "stashcloud-admin-key"
-  public_key = file("~/.ssh/id_ed25519.pub")
+  public_key = var.ssh_public_key
 }
 
 data "aws_ssm_parameter" "ubuntu_2404_ami" {
@@ -38,3 +38,5 @@ resource "aws_eip_association" "stashcloud_eip_association" {
   allocation_id = aws_eip.stashcloud_eip.id
   instance_id   = aws_instance.stashcloud_ec2.id
 }
+
+

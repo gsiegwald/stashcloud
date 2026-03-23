@@ -1,7 +1,7 @@
 # Stashcloud – Self-managed shared drive
 
 - Fully provisioned end-to-end with Terraform & Ansible.
-- Enforced HTTPS, Least-privilege access and centralized logging. 
+- Secured : Enforced HTTPS, Least-privilege policies and centralized logging. 
 
 Stashcloud is a secure, ready-to-deploy infrastructure for [Filestash](https://github.com/mickael-kerjean/filestash) — a web-based file manager — with S3-compatible object storage as the backend.
 
@@ -36,7 +36,7 @@ In the admin console, go to "Storage" and select "S3" as the backend.
 
 Under "Authentication Middleware" select "HTPASSWD" and create one ore more users.
 
-Under "Attribute Mapping", select S3 and fill the minmimum required fields.
+Under "Attribute Mapping", select S3 and fill the minimum required fields.
 
 You will need:
 

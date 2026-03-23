@@ -19,6 +19,7 @@ vault.yml
 # Keys and certificates
 *.pem
 id_ed25519*
+.ssh/
 
 # Python / virtual environment
 __pycache__/

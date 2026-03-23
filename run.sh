@@ -27,6 +27,32 @@ export CERTBOT_EMAIL
 echo "→ Email set to: $CERTBOT_EMAIL"
 
 # ─────────────────────────────────────────
+# SSH key management
+# ─────────────────────────────────────────
+
+# Anchor paths to the script's directory to ensure correct behavior
+# regardless of where the script is called from
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SSH_KEY_DIR="${SCRIPT_DIR}/.ssh"
+SSH_KEY_PATH="${SSH_KEY_DIR}/stashcloud_key"
+
+mkdir -p "$SSH_KEY_DIR"
+chmod 700 "$SSH_KEY_DIR"
+
+if [ ! -f "$SSH_KEY_PATH" ]; then
+  ssh-keygen -t ed25519 -f "$SSH_KEY_PATH" -N "" -C "stashcloud-deployer"
+  chmod 600 "$SSH_KEY_PATH"    # explicit permissions in case of permissive umask
+  echo "→ SSH key generated: $SSH_KEY_PATH"
+else
+  echo "→ Reusing existing SSH key: $SSH_KEY_PATH"
+fi
+
+# ANSIBLE_PRIVATE_KEY_FILE overrides private_key_file in ansible.cfg
+export TF_VAR_ssh_public_key=$(cat "${SSH_KEY_PATH}.pub")
+export ANSIBLE_PRIVATE_KEY_FILE="$SSH_KEY_PATH"
+export ANSIBLE_SSH_ARGS="-o UserKnownHostsFile=${SSH_KEY_DIR}/known_hosts"
+
+# ─────────────────────────────────────────
 # S3 bucket name management
 # ─────────────────────────────────────────
 

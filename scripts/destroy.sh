@@ -40,6 +40,21 @@ export AWS_DEFAULT_REGION="$AWS_REGION"
 echo "→ Region: $AWS_REGION"
 
 # ─────────────────────────────────────────
+# SSH key (required by Terraform variables)
+# ─────────────────────────────────────────
+
+SSH_KEY_PATH=".ssh/stashcloud_key"
+
+if [ ! -f "${SSH_KEY_PATH}.pub" ]; then
+  echo "Error: SSH key not found at ${SSH_KEY_PATH}.pub"
+  echo "Has the infrastructure been deployed with run.sh?"
+  exit 1
+fi
+
+export TF_VAR_ssh_public_key=$(cat "${SSH_KEY_PATH}.pub")
+echo "→ SSH key loaded: ${SSH_KEY_PATH}.pub"
+
+# ─────────────────────────────────────────
 # Admin IP detection (required for frontend)
 # ─────────────────────────────────────────
 
@@ -73,3 +88,14 @@ if [ "$MODE" = "all" ] || [ "$MODE" = "backend" ]; then
 fi
 
 echo "=== Done ==="
+
+# ─────────────────────────────────────────
+# Cleanup local state
+# ─────────────────────────────────────────
+
+# Remove state file when the bucket is destroyed (full or backend destroy)
+# Keep it when only the frontend is destroyed (bucket still exists)
+if [ "$MODE" = "all" ] || [ "$MODE" = "backend" ]; then
+  rm -f "$STATE_FILE"
+  echo "→ Local state file deleted"
+fi
