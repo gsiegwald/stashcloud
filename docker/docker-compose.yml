@@ -1,6 +1,6 @@
 services:
   filestash:
-    image: machines/filestash:latest
+    image: machines/filestash:latest #no versioning available at the moment (03/26)
     container_name: filestash
     networks:
       - stashnet
@@ -16,7 +16,7 @@ services:
         awslogs-stream: filestash
 
   nginx:
-    image: nginx:alpine
+    image: nginx:1.28.2-alpine
     container_name: nginx
     restart: unless-stopped
     depends_on:
@@ -38,7 +38,7 @@ services:
         awslogs-stream: nginx
 
   certbot:
-    image: certbot/certbot:latest
+    image: certbot/certbot:v5.4.0
     volumes:
       - certbot-etc:/etc/letsencrypt
       - certbot-webroot:/var/www/certbot

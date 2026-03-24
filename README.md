@@ -301,6 +301,8 @@ flowchart TB
 
 ### Automated deployment
 ```bash
+git clone https://github.com/gsiegwald/stashcloud.git
+cd stashcloud
 ./run.sh
 ```
 
@@ -316,6 +318,9 @@ The script asks for AWS region and email used for Let's Encrypt, and then everyt
 
 If you prefer to run each step manually, set the required environment variables first:
 ```bash
+git clone https://github.com/gsiegwald/stashcloud.git
+cd stashcloud
+
 # Required variables
 export TF_VAR_aws_region="eu-west-3"
 export AWS_DEFAULT_REGION="eu-west-3"

@@ -18,8 +18,9 @@ resource "aws_instance" "stashcloud_ec2" {
   metadata_options {
     http_endpoint               = "enabled"
     http_tokens                 = "required"
-    http_put_response_hop_limit = 2
-  }
+    #prevents Docker containers from accessing the IMDS service
+    http_put_response_hop_limit = 1
+   }
 
   tags = {
     Name    = "stashcloud_ec2"
