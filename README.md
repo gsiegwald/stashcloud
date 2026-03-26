@@ -520,9 +520,23 @@ In the box `Attribute Mapping`, enter the required S3 settings : access and secr
   * **CloudWatch Logs policy** (created by the *frontend* stack) grants only the required permissions to publish container logs to CloudWatch Logs.
 * **Centralized logging to CloudWatch Logs**: Nginx and Filestash containers use the Docker `awslogs` driver to ship logs over HTTPS to the log group `/stashcloud/containers` (log group managed by Terraform).
 
+## Future Improvements
 
-## Limitations
+- **SSH trust with AWS Systems Manager (SSM)**  
+  At the moment, the first SSH connection relies on a Trust On First Use (TOFU) approach.  
+  A future improvement would be to use AWS Systems Manager (SSM) as an out-of-band trust channel to retrieve and verify the EC2 host SSH key before the first SSH connection.
 
-- **Single instance** : the architecture runs on a single EC2 t3.micro instance
-  with no redundancy. It is not designed for high availability yet.
-- **AWS only** : deployment is currently supported on AWS only.
+- **Preconfigure the Filestash administrator password at deployment time**  
+  The administrator password is currently set during the first access to the web interface. A future improvement would be to define it during deployment instead, in order to reduce the initial bootstrap exposure.
+
+- **Preconfigure the S3 backend connection during deployment**  
+  The S3 bucket is currently configured manually through the Filestash web interface after the first login. A future improvement would be to preconfigure this backend during deployment so that the storage is available immediately without additional manual setup.
+
+- **Add a remote Terraform backend**  
+  The Terraform state is currently stored locally. A remote backend would centralize the state and add locking to prevent concurrent modifications during Terraform operations.
+
+- **Improve availability and instance redundancy**  
+  The current deployment relies on a single `t3.micro` EC2 instance, which provides no redundancy. Future improvements could include multiple instances behind a load balancer to increase availability and reduce the impact of instance failure.
+
+- **Add multi-cloud support**    
+The current implementation relies entirely on AWS for both object storage and compute. A future improvement would be to make the project more portable by supporting a multi-cloud deployment model, with alternative providers for storage and infrastructure.
