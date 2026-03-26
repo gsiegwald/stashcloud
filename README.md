@@ -520,3 +520,9 @@ In the box `Attribute Mapping`, enter the required S3 settings : access and secr
   * **CloudWatch Logs policy** (created by the *frontend* stack) grants only the required permissions to publish container logs to CloudWatch Logs.
 * **Centralized logging to CloudWatch Logs**: Nginx and Filestash containers use the Docker `awslogs` driver to ship logs over HTTPS to the log group `/stashcloud/containers` (log group managed by Terraform).
 
+
+## Limitations
+
+- **Single instance** : the architecture runs on a single EC2 t3.micro instance
+  with no redundancy. It is not designed for high availability yet.
+- **AWS only** : deployment is currently supported on AWS only.

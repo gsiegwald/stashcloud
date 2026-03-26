@@ -43,7 +43,9 @@ echo "→ Region: $AWS_REGION"
 # SSH key (required by Terraform variables)
 # ─────────────────────────────────────────
 
-SSH_KEY_PATH=".ssh/stashcloud_key"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SSH_KEY_PATH="${SCRIPT_DIR}/../.ssh/stashcloud_key"
+
 
 if [ ! -f "${SSH_KEY_PATH}.pub" ]; then
   echo "Error: SSH key not found at ${SSH_KEY_PATH}.pub"

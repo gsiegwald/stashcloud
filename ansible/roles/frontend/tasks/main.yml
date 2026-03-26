@@ -65,7 +65,6 @@
     --no-eff-email
     --non-interactive
   register: certbot_result
-  no_log: true
 
 - name: Show Certbot output
   debug:

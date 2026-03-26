@@ -8,6 +8,15 @@ services:
       - filestash_data:/app/data/state/
     restart: unless-stopped
 
+    # Container hardening
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    mem_limit: 512m
+    cpus: 1
+    pids_limit: 200
+
     logging:
       driver: awslogs
       options:
@@ -30,6 +39,27 @@ services:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
       - certbot-etc:/etc/letsencrypt:ro
       - certbot-webroot:/var/www/certbot:ro
+
+    # Container hardening
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE    # required to listen on ports 80 and 443
+      - CHOWN
+      - SETUID
+      - SETGID
+
+    read_only: true
+    tmpfs:
+      - /var/run
+      - /tmp
+      - /var/cache/nginx  
+    mem_limit: 128m
+    cpus: 0.5
+    pids_limit: 100
+
     logging:
       driver: awslogs
       options:
@@ -42,6 +72,15 @@ services:
     volumes:
       - certbot-etc:/etc/letsencrypt
       - certbot-webroot:/var/www/certbot
+
+    # Container hardening
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    mem_limit: 128m
+    cpus: 0.5
+    pids_limit: 50
 
 networks:
   stashnet:
