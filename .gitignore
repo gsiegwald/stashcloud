@@ -15,6 +15,7 @@ crash.*.log
 # Environment / secret
 .env
 vault.yml
+.home/
 
 # Keys and certificates
 *.pem

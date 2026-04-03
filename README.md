@@ -10,6 +10,69 @@ Google Drive or Dropbox, and without exposing storage credentials to end users.
 
 ## TL;DR
 
+### Option 1 — Deploy using Docker (recommended)
+
+No local tooling required beyond Docker and AWS credentials.
+
+> **Requires:**
+> - Docker installed on your machine
+> - AWS credentials configured (`aws configure`)
+
+If your AWS CLI profile is not named `default`, export it first:
+```bash
+export AWS_PROFILE=your-profile-name
+```
+
+**Deploy:**
+```bash
+git clone https://github.com/gsiegwald/stashcloud.git
+cd stashcloud
+docker build -t stashcloud .
+docker run --rm -it \
+  -v "$HOME/.aws:/tmp/home/.aws:ro" \
+  -v "$(pwd):/workspace" \
+  -e AWS_PROFILE \
+  stashcloud
+```
+
+The script will prompt for:
+- AWS region (default: `eu-west-3`)
+- A valid email address for Let's Encrypt
+
+**Destroy:**
+```bash
+docker run --rm -it \
+  -v "$HOME/.aws:/tmp/home/.aws:ro" \
+  -v "$(pwd):/workspace" \
+  -e AWS_PROFILE \
+  stashcloud \
+  ./scripts/destroy.sh
+```
+
+---
+
+### Option 2 — Deploy directly (local tooling required)
+
+> **Requires:**
+> - Terraform, Ansible, AWS CLI, Git, Python 3 installed on your machine
+> - AWS credentials configured (`aws configure`)
+
+```bash
+git clone https://github.com/gsiegwald/stashcloud.git
+cd stashcloud
+./run.sh
+```
+
+The script will prompt for:
+- AWS region (default: `eu-west-3`)
+- A valid email address for Let's Encrypt
+
+**Destroy:**
+```bash
+./scripts/destroy.sh
+```
+
+
 ### Infrastructure provisionning 
 > **Requires:**
 > - Docker, Git and AWS CLI installed on your machine
@@ -521,6 +584,9 @@ In the box `Attribute Mapping`, enter the required S3 settings : access and secr
 * **Centralized logging to CloudWatch Logs**: Nginx and Filestash containers use the Docker `awslogs` driver to ship logs over HTTPS to the log group `/stashcloud/containers` (log group managed by Terraform).
 
 ## Future Improvements
+
+- **Automate dependency version monitoring**  
+  Tool and image versions are currently pinned or managed manually across the project: deployment tools in the Dockerfile (Terraform, AWS CLI, Ansible, Ansible collections), application images on the EC2 instance (Filestash, Nginx, Certbot), and packages installed via Ansible on the instance. A future improvement would be to introduce an automated dependency monitoring tool to track new releases and security updates across all these components, and open pull requests automatically when newer versions are available.
 
 - **SSH trust with AWS Systems Manager (SSM)**  
   At the moment, the first SSH connection relies on a Trust On First Use (TOFU) approach.  
