@@ -8,9 +8,9 @@ Stashcloud is a secure, ready-to-deploy infrastructure for [Filestash](https://g
 It provides a shared drive accessible from a web browser, without relying on services like 
 Google Drive or Dropbox, and without exposing storage credentials to end users.
 
-## TL;DR
+## Infrastructure provisionning 
 
-### Option 1 — Deploy using Docker (recommended)
+### Option 1 — Deploy using Docker
 
 No local tooling required beyond Docker and AWS credentials.
 
@@ -48,10 +48,7 @@ docker run --rm -it \
   stashcloud \
   ./scripts/destroy.sh
 ```
-
----
-
-### Option 2 — Deploy directly (local tooling required)
+### Option 2 — Deploy using local environment
 
 > **Requires:**
 > - Terraform, Ansible, AWS CLI, Git, Python 3 installed on your machine
@@ -71,21 +68,7 @@ The script will prompt for:
 ```bash
 ./scripts/destroy.sh
 ```
-
-
-### Infrastructure provisionning 
-> **Requires:**
-> - Docker, Git and AWS CLI installed on your machine
-> - AWS credentials configured (`aws configure`)
-```bash
-git clone https://github.com/gsiegwald/stashcloud.git
-cd stashcloud
-./run.sh
-```
-
-The script will prompt for:
-- AWS region (default: `eu-west-3`)
-- A valid email address for Let's Encrypt
+---
 
 ### Post-deployment setup
 
