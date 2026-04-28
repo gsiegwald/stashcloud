@@ -71,29 +71,69 @@ The script will prompt for:
 ```
 ---
 
-## Post-deployment setup
+## Filestash setup (admin, users, S3 backend connection)
 
-### 1) Set the admin password
+### 1) Open the Filestash admin console
 
-Open `https://<EC2_IP_WITH_DASHES>.sslip.io/admin/setup` and set the Filestash admin password.
+1. In a web browser, open:
+   `https://<EC2_IP_WITH_DASHES>.sslip.io/admin/setup`
 
-### 2) Create users and connect the S3 bucket
+2. Set the Filestash admin password (see below)
 
-In the admin console, go to "Storage" and select "S3" as the backend. 
+![Filestash admin password setup](docs/screenshots/admin_password_filestash.png)
 
-Under "Authentication Middleware" select "HTPASSWD" and create one ore more users.
+If the admin password is already configured, open:
+`https://<EC2_IP_WITH_DASHES>.sslip.io/admin`
+and sign in with the admin password.
 
-Under "Attribute Mapping", select S3 and fill the minimum required fields.
+### 2) Configure S3 as the storage backend
 
-You will need:
+1. In the admin console, go to the Storage configuration (left panel).
+2. Select S3 as storage backend, remove others if needed (see below).
 
-- AWS credentials — Your AWS Access Key ID and Secret Access Key
-- AWS region — the region you entered at deployment
-- IAM role ARN — retrieve with:
+![Select S3 storage backend](docs/screenshots/choose_storage_backend_filestash.png)
+
+
+
+### 3) Create Filestash users
+
+Under `Authentification Middleware`, select `HTPASSWD` , define a username and password for each user who will access the drive. (see below)
+
+![User credentials setup](docs/screenshots/user_credentials_setup_filestash.png)
+
+### 4) Connect the S3 bucket
+
+You will need the S3 access credentials and the IAM role information used by the instance.
+
+**Get the S3 Access Key and Secret Key (if applicable):**
+
 ```bash
-  terraform -chdir=terraform/frontend output -raw ec2_role_arn
+cat ~/.aws/credentials
 ```
 
+**Get the AWS region**
+
+```bash
+grep aws_region .stashcloud-state
+```
+
+**Get the EC2 IAM role ARN:**
+
+```bash
+terraform -chdir=terraform/frontend output -raw ec2_role_arn
+```
+In the box `Attribute Mapping`, enter the required S3 settings : access and secret key, AWS region and IAM role ARN (see below).
+
+![S3 bucket connection settings](docs/screenshots/S3_connection_configuration_filestash.png)
+
+
+### 5) Sign in as a user
+
+1. Go back to the Filestash login page:
+   `https://<EC2_IP_WITH_DASHES>.sslip.io/`
+2. Sign in using one of the user accounts created earlier to access the file manager interface.
+
+---
 ## Detailed prerequisites for local environment
 
 * Tools needed:
@@ -395,8 +435,6 @@ ansible-playbook \
   --extra-vars "certbot_email=${CERTBOT_EMAIL}"
 ```
 
----
-
 ### Infrastructure destruction
 
 Set the environment variables as above, then:
@@ -469,6 +507,8 @@ For example, if the EC2 public IP is `52.47.80.15`, the URL is:
 
     https://52-47-80-15.sslip.io
 
+
+---
 ## Filestash setup (admin, users, S3 backend connection)
 
 ### 1) Open the Filestash admin console
@@ -484,7 +524,7 @@ If the admin password is already configured, open:
 `https://<EC2_IP_WITH_DASHES>.sslip.io/admin`
 and sign in with the admin password.
 
----
+
 
 ### 2) Configure S3 as the storage backend
 
@@ -493,14 +533,13 @@ and sign in with the admin password.
 
 ![Select S3 storage backend](docs/screenshots/choose_storage_backend_filestash.png)
 
----
+
 
 ### 3) Create Filestash users
 
 Under `Authentification Middleware`, select `HTPASSWD` , define a username and password for each user who will access the drive. (see below)
 
 ![User credentials setup](docs/screenshots/user_credentials_setup_filestash.png)
----
 
 ### 4) Connect the S3 bucket
 
@@ -526,7 +565,7 @@ terraform -chdir=terraform/frontend output -raw ec2_role_arn
 In the box `Attribute Mapping`, enter the required S3 settings : access and secret key, AWS region and IAM role ARN (see below).
 
 ![S3 bucket connection settings](docs/screenshots/S3_connection_configuration_filestash.png)
----
+
 
 ### 5) Sign in as a user
 
@@ -548,6 +587,8 @@ In the box `Attribute Mapping`, enter the required S3 settings : access and secr
   * **S3 access policy** (created by the *backend* stack) grants only the required permissions on the dedicated bucket (e.g., list/read/write objects), and is attached to the EC2 role by the *frontend* stack.
   * **CloudWatch Logs policy** (created by the *frontend* stack) grants only the required permissions to publish container logs to CloudWatch Logs.
 * **Centralized logging to CloudWatch Logs**: Nginx and Filestash containers use the Docker `awslogs` driver to ship logs over HTTPS to the log group `/stashcloud/containers` (log group managed by Terraform).
+
+---
 
 ## Future Improvements
 
