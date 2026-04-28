@@ -94,10 +94,6 @@ You will need:
   terraform -chdir=terraform/frontend output -raw ec2_role_arn
 ```
 
---
-
-./destroy.sh
-```
 ## Detailed prerequisites for local environment
 
 * Tools needed:
