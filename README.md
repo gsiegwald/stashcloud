@@ -12,18 +12,16 @@ Google Drive or Dropbox, and without exposing storage credentials to end users.
 
 ### Option 1 — Deploy using Docker
 
-No local tooling required beyond Docker and AWS credentials.
-
 > **Requires:**
 > - Docker installed on your machine
 > - AWS credentials configured (`aws configure`)
 
-If your AWS CLI profile is not named `default`, export it first:
+First, an environment variable containing your AWS profile name must be created :
 ```bash
 export AWS_PROFILE=your-profile-name
 ```
 
-**Deploy:**
+Infrastructure deployment :
 ```bash
 git clone https://github.com/gsiegwald/stashcloud.git
 cd stashcloud
@@ -35,11 +33,14 @@ docker run --rm -it \
   stashcloud
 ```
 
-The script will prompt for:
-- AWS region (default: `eu-west-3`)
-- A valid email address for Let's Encrypt
+An automated script (run.sh) will be launched, it will asks for AWS region and email used for Let's Encrypt, and then everything else is handled automatically :
 
-**Destroy:**
+- Generates a unique S3 bucket name and persists it in `.stashcloud-state`
+- Detects your public IP automatically for SSH access
+- SSH key pair is generated in `.ssh/` and reused across deployments
+- Runs Terraform and Ansible end-to-end
+
+Infrastructure destruction :
 ```bash
 docker run --rm -it \
   -v "$HOME/.aws:/tmp/home/.aws:ro" \
@@ -48,10 +49,11 @@ docker run --rm -it \
   stashcloud \
   ./scripts/destroy.sh
 ```
+
 ### Option 2 — Deploy using local environment
 
 > **Requires:**
-> - Terraform, Ansible, AWS CLI, Git, Python 3 installed on your machine
+> - Terraform, Ansible, AWS CLI, Git, Python 3 installed on your machine (see detailed prerequistes below)
 > - AWS credentials configured (`aws configure`)
 
 ```bash
@@ -59,7 +61,6 @@ git clone https://github.com/gsiegwald/stashcloud.git
 cd stashcloud
 ./run.sh
 ```
-
 The script will prompt for:
 - AWS region (default: `eu-west-3`)
 - A valid email address for Let's Encrypt
@@ -70,13 +71,13 @@ The script will prompt for:
 ```
 ---
 
-### Post-deployment setup
+## Post-deployment setup
 
-#### 1) Set the admin password
+### 1) Set the admin password
 
 Open `https://<EC2_IP_WITH_DASHES>.sslip.io/admin/setup` and set the Filestash admin password.
 
-#### 2) Create users and connect the S3 bucket
+### 2) Create users and connect the S3 bucket
 
 In the admin console, go to "Storage" and select "S3" as the backend. 
 
@@ -93,13 +94,13 @@ You will need:
   terraform -chdir=terraform/frontend output -raw ec2_role_arn
 ```
 
-### Destroy the infrastructure
-```bash
+--
+
 ./destroy.sh
 ```
-## Prerequisites
+## Detailed prerequisites for local environment
 
-* Local workstation with the following tools installed:
+* Tools needed:
 
   * Terraform (tested: 1.14.3)
   * Ansible (tested: 2.10.8)
@@ -130,8 +131,7 @@ You will need:
   * Outbound HTTPS access from your workstation to AWS APIs (Terraform + Ansible inventory)
   * Ability to reach the EC2 instance over SSH (22), HTTP (80) and HTTPS (443)
 
-* A valid email address for Let's Encrypt certificate registration
-
+---
 ## Architecture 
 High-level view of the target architecture and the main network flows between the client, the Filestash VM, and the S3-compatible Object Storage bucket.
 
@@ -183,6 +183,8 @@ The target architecture includes:
 * An Amazon S3 bucket to store uploaded files.
 * Centralized logging to Amazon CloudWatch Logs for both Nginx and Filestash (Docker `awslogs` log driver).
 
+
+---
 ## Repository structure
 
 ```text
@@ -216,8 +218,8 @@ Note: The following files and directories are local-only and intentionally ignor
 * `.stashcloud-state` — stores the generated S3 bucket name and AWS region across deployments.
 * `.ssh/` — auto-generated SSH key pair used for deployment.
 
-
-## Provisionning
+---
+## Detailed Infrastructure Provisionning
 
 ### Terraform Workflow :
 
@@ -344,23 +346,7 @@ flowchart TB
   class DC,TMPL,OPT fileNode;
 
 ```
-
-### Automated deployment
-```bash
-git clone https://github.com/gsiegwald/stashcloud.git
-cd stashcloud
-./run.sh
-```
-
-The script asks for AWS region and email used for Let's Encrypt, and then everything else is handled automatically :
-- Generates a unique S3 bucket name and persists it in `.stashcloud-state`
-- Detects your public IP automatically for SSH access
-- SSH key pair is generated in `.ssh/` and reused across deployments
-- Runs Terraform and Ansible end-to-end
-
----
-
-### Manual deployment
+### Step by step provisionning 
 
 If you prefer to run each step manually, set the required environment variables first:
 ```bash
@@ -552,6 +538,7 @@ In the box `Attribute Mapping`, enter the required S3 settings : access and secr
    `https://<EC2_IP_WITH_DASHES>.sslip.io/`
 2. Sign in using one of the user accounts created earlier to access the file manager interface.
 
+---
 ## Security
 
 * **HTTPS with valid TLS certificate**: all web traffic is served over HTTPS using a certificate automatically obtained from Let's Encrypt via Certbot. HTTP requests on port 80 are redirected to HTTPS. The certificate is tied to a sslip.io domain derived from the instance's public IP.
