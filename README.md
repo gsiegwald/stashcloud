@@ -3,7 +3,7 @@
 - Fully provisioned end-to-end with Terraform & Ansible.
 - Secured : Enforced HTTPS, Least-privilege policies and centralized logging. 
 
-Stashcloud is a secure, ready-to-deploy infrastructure for [Filestash](https://github.com/mickael-kerjean/filestash) — a web-based file manager — with S3-compatible object storage as the backend.
+Stashcloud is a secure, ready-to-deploy infrastructure for the web-based file manager [Filestash](https://github.com/mickael-kerjean/filestash) with S3 compatible object storage as the backend.
 
 It provides a shared drive accessible from a web browser, without relying on services like 
 Google Drive or Dropbox, and without exposing storage credentials to end users.
