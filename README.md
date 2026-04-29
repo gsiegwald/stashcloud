@@ -1,4 +1,4 @@
-# Stashcloud – Self-hosted shared drive
+# Stashcloud – Self-managed shared drive
 
 - Fully provisioned end-to-end with Terraform & Ansible.
 - Secure : Enforced HTTPS, Least-privilege policies and centralized logging. 
