@@ -1,14 +1,14 @@
 # Stashcloud – Self-hosted shared drive
 
 - Fully provisioned end-to-end with Terraform & Ansible.
-- Secured : Enforced HTTPS, Least-privilege policies and centralized logging. 
+- Secure : Enforced HTTPS, Least-privilege policies and centralized logging. 
 
-Stashcloud is a secure, ready-to-deploy infrastructure for the web-based file manager [Filestash](https://github.com/mickael-kerjean/filestash) with S3 compatible object storage as the backend.
+Stashcloud is a secure, ready-to-deploy infrastructure for the web-based file manager [Filestash](https://github.com/mickael-kerjean/filestash), using AWS, with S3 object storage as the backend.
 
 It provides a shared drive accessible from a web browser, without relying on services like 
 Google Drive or Dropbox, and without exposing storage credentials to end users.
 
-## Infrastructure provisionning 
+## Infrastructure provisioning 
 
 ### Option 1 — Deploy using Docker
 
@@ -33,7 +33,7 @@ docker run --rm -it \
   stashcloud
 ```
 
-An automated script (run.sh) will be launched, it will asks for AWS region and email used for Let's Encrypt, and then everything else is handled automatically :
+An automated script (run.sh) will be launched, it will ask for AWS region and email used for Let's Encrypt, and then everything else is handled automatically :
 
 - Generates a unique S3 bucket name and persists it in `.stashcloud-state`
 - Detects your public IP automatically for SSH access
@@ -53,7 +53,7 @@ docker run --rm -it \
 ### Option 2 — Deploy using local environment
 
 > **Requires:**
-> - Terraform, Ansible, AWS CLI, Git, Python 3 installed on your machine (see detailed prerequistes below)
+> - Terraform, Ansible, AWS CLI, Git, Python 3 installed on your machine (see detailed prerequisites below)
 > - AWS credentials configured (`aws configure`)
 
 ```bash
@@ -97,31 +97,25 @@ and sign in with the admin password.
 
 ### 3) Create Filestash users
 
-Under `Authentification Middleware`, select `HTPASSWD` , define a username and password for each user who will access the drive. (see below)
+Under `Authentication Middleware`, select `HTPASSWD` , define a username and password for each user who will access the drive. (see below)
 
 ![User credentials setup](docs/screenshots/user_credentials_setup_filestash.png)
 
 ### 4) Connect the S3 bucket
 
-You will need the S3 access credentials and the IAM role information used by the instance.
-
-**Get the S3 Access Key and Secret Key (if applicable):**
-
-```bash
-cat ~/.aws/credentials
-```
-
-**Get the AWS region**
-
-```bash
-grep aws_region .stashcloud-state
-```
+You will need your AWS region, AWS S3 access credentials (with least privileges for better security) and the IAM role information used by the instance.
 
 **Get the EC2 IAM role ARN:**
 
 ```bash
 terraform -chdir=terraform/frontend output -raw ec2_role_arn
 ```
+
+with Docker, run inside the container: 
+```bash
+docker run --rm -v "$(pwd):/workspace" stashcloud terraform -chdir=terraform/frontend output -raw ec2_role_arn"
+```
+
 In the box `Attribute Mapping`, enter the required S3 settings : access and secret key, AWS region and IAM role ARN (see below).
 
 ![S3 bucket connection settings](docs/screenshots/S3_connection_configuration_filestash.png)
@@ -233,7 +227,7 @@ stashcloud/
 │   │   └── aws_ec2.yaml
 │   ├── playbooks/                  # Orchestration playbooks
 │   └── roles/
-│       ├── base/                   # OS update/update, Docker + AWS CLI install
+│       ├── base/                   # OS update/upgrade, Docker + AWS CLI install
 │       └── frontend/               # Filestash, Nginx, Certbot deployment
 │           └── templates/          # Jinja2 templates for Nginx config (HTTP-only + HTTPS)
 ├── docker/                         # Docker Compose stack definition
@@ -244,6 +238,7 @@ stashcloud/
 │   ├── backend/                    # S3 bucket + IAM policy
 │   └── frontend/                   # VPC, EC2, Security Group, IAM role, CloudWatch Logs
 ├── ansible.cfg                     # Global Ansible configuration
+├── Dockerfile                      # Dockerfile for creation of provisioning container
 ├── run.sh                          # Main deployment entry point
 └── README.md
 ```
@@ -255,7 +250,7 @@ Note: The following files and directories are local-only and intentionally ignor
 * `.ssh/` — auto-generated SSH key pair used for deployment.
 
 ---
-## Detailed Infrastructure Provisionning
+## Detailed infrastructure provisioning
 
 ### Terraform Workflow :
 
@@ -382,7 +377,7 @@ flowchart TB
   class DC,TMPL,OPT fileNode;
 
 ```
-### Step by step provisionning 
+### Step by step provisioning 
 
 If you prefer to run each step manually, set the required environment variables first:
 ```bash
@@ -448,9 +443,9 @@ terraform -chdir=terraform/backend destroy
 
 Or using the provided script:
 ```bash
-./destroy.sh           # destroy everything
-./destroy.sh frontend  # destroy frontend only
-./destroy.sh backend   # destroy backend only
+./scripts/destroy.sh           # destroy everything
+./scripts/destroy.sh frontend  # destroy frontend only
+./scripts/destroy.sh backend   # destroy backend only
 ```
 
 > **Warning**: always destroy the infrastructure before deleting the repository
@@ -509,71 +504,6 @@ For example, if the EC2 public IP is `52.47.80.15`, the URL is:
 
 
 ---
-## Filestash setup (admin, users, S3 backend connection)
-
-### 1) Open the Filestash admin console
-
-1. In a web browser, open:
-   `https://<EC2_IP_WITH_DASHES>.sslip.io/admin/setup`
-
-2. Set the Filestash admin password (see below)
-
-![Filestash admin password setup](docs/screenshots/admin_password_filestash.png)
-
-If the admin password is already configured, open:
-`https://<EC2_IP_WITH_DASHES>.sslip.io/admin`
-and sign in with the admin password.
-
-
-
-### 2) Configure S3 as the storage backend
-
-1. In the admin console, go to the Storage configuration (left panel).
-2. Select S3 as storage backend, remove others if needed (see below).
-
-![Select S3 storage backend](docs/screenshots/choose_storage_backend_filestash.png)
-
-
-
-### 3) Create Filestash users
-
-Under `Authentification Middleware`, select `HTPASSWD` , define a username and password for each user who will access the drive. (see below)
-
-![User credentials setup](docs/screenshots/user_credentials_setup_filestash.png)
-
-### 4) Connect the S3 bucket
-
-You will need the S3 access credentials and the IAM role information used by the instance.
-
-**Get the S3 Access Key and Secret Key (if applicable):**
-
-```bash
-cat ~/.aws/credentials
-```
-
-**Get the AWS region**
-
-```bash
-grep aws_region .stashcloud-state
-```
-
-**Get the EC2 IAM role ARN:**
-
-```bash
-terraform -chdir=terraform/frontend output -raw ec2_role_arn
-```
-In the box `Attribute Mapping`, enter the required S3 settings : access and secret key, AWS region and IAM role ARN (see below).
-
-![S3 bucket connection settings](docs/screenshots/S3_connection_configuration_filestash.png)
-
-
-### 5) Sign in as a user
-
-1. Go back to the Filestash login page:
-   `https://<EC2_IP_WITH_DASHES>.sslip.io/`
-2. Sign in using one of the user accounts created earlier to access the file manager interface.
-
----
 ## Security
 
 * **HTTPS with valid TLS certificate**: all web traffic is served over HTTPS using a certificate automatically obtained from Let's Encrypt via Certbot. HTTP requests on port 80 are redirected to HTTPS. The certificate is tied to a sslip.io domain derived from the instance's public IP.
@@ -581,9 +511,7 @@ In the box `Attribute Mapping`, enter the required S3 settings : access and secr
 * **SSH restricted to `admin_ip` via the Security Group** (port 22 allowed only from your /32).
 * **No password authentication**: the Ubuntu image uses key-based SSH only by default.
 * **IMDSv2 enforced**: instance metadata access requires a session token (no IMDSv1).
-* **No static AWS keys on the EC2 instance**: access to AWS services is provided through an IAM Role
 * **Least-privilege IAM policies**:
-
   * **S3 access policy** (created by the *backend* stack) grants only the required permissions on the dedicated bucket (e.g., list/read/write objects), and is attached to the EC2 role by the *frontend* stack.
   * **CloudWatch Logs policy** (created by the *frontend* stack) grants only the required permissions to publish container logs to CloudWatch Logs.
 * **Centralized logging to CloudWatch Logs**: Nginx and Filestash containers use the Docker `awslogs` driver to ship logs over HTTPS to the log group `/stashcloud/containers` (log group managed by Terraform).
